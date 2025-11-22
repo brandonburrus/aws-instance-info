@@ -134,3 +134,14 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# generated files
+data/*
+lib/types.ts
+
+# python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+

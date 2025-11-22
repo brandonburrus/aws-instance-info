@@ -1,0 +1,9 @@
+[project]
+name = "ec2-details-scripts"
+version = "0.1.0"
+description = "Automation scripts for scrapping the AWS docs for EC2 details."
+requires-python = ">=3.13"
+dependencies = [
+    "beautifulsoup4>=4.14.2",
+    "requests>=2.32.5",
+]
