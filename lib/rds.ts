@@ -74,7 +74,7 @@ export function getRDSInfo(): RDSInfo {
  * console.log(instance.instanceClass) // 'db.m5.large'
  * console.log(instance.vCPUs) // 2
  * console.log(instance.memoryGiB) // 8
- * console.log(instance.networkPerformanceGbps) // 10
+ * console.log(instance.networkBandwidthGbps) // 'Up to 10'
  * ```
  */
 export function getRDSInstanceInfo(
@@ -92,10 +92,10 @@ export function getRDSInstanceInfo(
 
 /**
  * Get all data for an RDS instance family.
- * Includes specifications for all instance classes in the family. Results are cached using LRU.
+ * Includes the list of instance classes in the family. Results are cached using LRU.
  *
  * @param family - The instance family (e.g., "M5")
- * @returns Family data including all instance class specifications
+ * @returns Family data including category and instance class list
  *
  * @example
  * ```typescript
@@ -104,8 +104,6 @@ export function getRDSInstanceInfo(
  * const family = getRDSFamily('M5')
  * console.log(family.category) // 'general_purpose'
  * console.log(family.instanceClasses) // ['db.m5.large', 'db.m5.xlarge', ...]
- * console.log(family.instances['db.m5.large'].vCPUs) // 2
- * console.log(family.instances['db.m5.large'].memoryGiB) // 8
  * ```
  */
 export function getRDSFamily(family: RDSInstanceFamily): RDSFamilyData {

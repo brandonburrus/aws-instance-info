@@ -77,7 +77,7 @@ export function getElastiCacheInfo(): ElastiCacheInfo {
  * console.log(node.nodeType) // 'cache.m5.large'
  * console.log(node.vCPUs) // 2
  * console.log(node.memoryGiB) // 6.38
- * console.log(node.networkPerformanceGbps) // 10
+ * console.log(node.networkPerformance) // 'Up to 10 Gigabit'
  * ```
  */
 export function getElastiCacheNodeInfo(
@@ -95,10 +95,10 @@ export function getElastiCacheNodeInfo(
 
 /**
  * Get all data for an Elasticache node family.
- * Includes specifications for all node types in the family. Results are cached using LRU.
+ * Includes the list of node types in the family. Results are cached using LRU.
  *
  * @param family - The node family (e.g., "M5")
- * @returns Family data including all node type specifications
+ * @returns Family data including category and node type list
  *
  * @example
  * ```typescript
@@ -107,8 +107,6 @@ export function getElastiCacheNodeInfo(
  * const family = getElastiCacheFamily('M5')
  * console.log(family.category) // 'general_purpose'
  * console.log(family.nodeTypes) // ['cache.m5.large', 'cache.m5.xlarge', ...]
- * console.log(family.nodes['cache.m5.large'].vCPUs) // 2
- * console.log(family.nodes['cache.m5.large'].memoryGiB) // 6.38
  * ```
  */
 export function getElastiCacheFamily(

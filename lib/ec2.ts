@@ -72,9 +72,9 @@ export function getEC2Info(): EC2Info {
  *
  * const instance = getEC2InstanceInfo('m5.large')
  * console.log(instance.instanceType) // 'm5.large'
- * console.log(instance.performance.vCPUs) // 2
- * console.log(instance.performance.memoryGiB) // 8
- * console.log(instance.network.bandwidthGbps) // { min: 0.75, max: 10 }
+ * console.log(instance.vCPUs) // 2
+ * console.log(instance.memoryGiB) // 8
+ * console.log(instance.hypervisor) // 'Nitro v2'
  * ```
  */
 export function getEC2InstanceInfo(
@@ -92,11 +92,11 @@ export function getEC2InstanceInfo(
 
 /**
  * Get all data for an EC2 instance family.
- * Includes the family summary and specifications for all instance types in the family.
+ * Includes the family metadata and list of instance types in the family.
  * Results are cached using LRU.
  *
  * @param family - The instance family (e.g., "M5")
- * @returns Family data including all instance specifications
+ * @returns Family data including metadata and instance type list
  *
  * @example
  * ```typescript
@@ -105,8 +105,8 @@ export function getEC2InstanceInfo(
  * const family = getEC2Family('M5')
  * console.log(family.category) // 'general_purpose'
  * console.log(family.instanceTypes) // ['m5.large', 'm5.xlarge', ...]
- * console.log(family.familySummary.description) // 'General Purpose...'
- * console.log(family.instances['m5.large'].performance.vCPUs) // 2
+ * console.log(family.hypervisor) // 'Nitro v2'
+ * console.log(family.processorArchitecture) // 'Intel (x86_64)'
  * ```
  */
 export function getEC2Family(family: EC2InstanceFamily): EC2FamilyData {
@@ -276,7 +276,7 @@ export function isValidEC2Family(family: string): boolean {
  * const instances = getEC2Instances(['m5.large', 'm5.xlarge', 'c7.2xlarge'])
  *
  * for (const [type, details] of instances) {
- *   console.log(`${type}: ${details.performance.vCPUs} vCPUs`)
+ *   console.log(`${type}: ${details.vCPUs} vCPUs`)
  * }
  * // m5.large: 2 vCPUs
  * // m5.xlarge: 4 vCPUs

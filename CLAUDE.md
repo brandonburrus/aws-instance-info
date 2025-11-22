@@ -38,10 +38,10 @@ scripts/
 
 `scripts/generate.py` scrapes AWS EC2, RDS, and Elasticache documentation and outputs:
 1. EC2 instance JSON files (`data/ec2/instances/*.json`)
-2. EC2 family JSON files with aggregated specs (`data/ec2/families/*.json`)
+2. EC2 family JSON files (`data/ec2/families/*.json`)
 3. EC2 info manifest (`data/ec2/info.json`)
 4. RDS instance JSON files (`data/rds/instances/*.json`)
-5. RDS family JSON files with aggregated specs (`data/rds/families/*.json`)
+5. RDS family JSON files (`data/rds/families/*.json`)
 6. RDS info manifest (`data/rds/info.json`)
 7. Elasticache node JSON files (`data/elasticache/nodes/*.json`)
 8. Elasticache family JSON files (`data/elasticache/families/*.json`)
@@ -59,7 +59,7 @@ Run with: `(cd scripts && uv run generate.py)`
 ## Key Types
 
 All JSON keys and TypeScript interfaces use **camelCase**:
-- `instanceType`, `familySummary`, `memoryGiB`, `vCPUs`, `bandwidthGbps`, `ebsEncryption`, `nitroTPM`
+- `instanceType`, `memoryGiB`, `vCPUs`, `bandwidthGbps`, `ebsEncryption`, `nitroTPM`
 
 ### EC2 Types
 - `EC2InstanceType` - all valid instance type strings (e.g., "m5.large")

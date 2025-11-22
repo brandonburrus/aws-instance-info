@@ -20,60 +20,51 @@ npm install aws-instance-info
 
 ## Examples
 
-### EC2 Instances
+### EC2
 
 Get details for a specific EC2 instance type:
 
 ```typescript
 import { getEC2InstanceInfo } from 'aws-instance-info';
 
-const instance = getEC2InstanceInfo('m5.large');
-console.log(instance.performance.memoryGiB);  // 8
-console.log(instance.performance.vCPUs);      // 2
-console.log(instance.category);               // 'general_purpose'
+const m5Large = getEC2InstanceInfo('m5.large');
+console.log(m5Large.memoryGiB);  // 8
+console.log(m5Large.vCPUs);      // 2
+console.log(m5Large.category);   // 'general_purpose'
 ```
 
-Get all instances in a family:
+Get details for an entire EC2 instance family:
 
 ```typescript
 import { getEC2Family } from 'aws-instance-info';
 
-const family = getEC2Family('M5');
-console.log(family.instances);  // Array of all M5 instance types
-console.log(family.summary);    // Family-level summary
+const m5Family = getEC2Family('M5');
+console.log(m5Family.instanceTypes);  // ['m5.large', 'm5.xlarge', ...]
+console.log(m5Family.hypervisor);     // 'Nitro v2'
 ```
 
-### RDS Instances
+### RDS
 
 Get details for a specific RDS instance class:
 
 ```typescript
 import { getRDSInstanceInfo } from 'aws-instance-info';
 
-const instance = getRDSInstanceInfo('db.m5.large');
-console.log(instance.spec.memoryGiB);  // 8
-console.log(instance.spec.vCPUs);      // 2
-console.log(instance.category);        // 'general_purpose'
+const dbM5Large = getRDSInstanceInfo('db.m5.large');
+console.log(dbM5Large.memoryGiB);  // 8
+console.log(dbM5Large.vCPUs);      // 2
+console.log(dbM5Large.category);   // 'general_purpose'
 ```
 
-List all RDS instance classes:
-
-```typescript
-import { getAllRDSInstanceClasses } from 'aws-instance-info';
-
-const classes = getAllRDSInstanceClasses();
-console.log(classes);  // ['db.m5.large', 'db.m5.xlarge', ...]
-```
-
-### ElastiCache Nodes
+### ElastiCache
 
 Get details for a specific ElastiCache node type:
 
 ```typescript
 import { getElastiCacheNodeInfo } from 'aws-instance-info';
 
-const node = getElastiCacheNodeInfo('cache.m5.large');
-console.log(node.spec.memoryGiB);   // 6.38
-console.log(node.spec.vCPUs);       // 2
-console.log(node.category);         // 'general_purpose'
+const cacheM5Large = getElastiCacheNodeInfo('cache.m5.large');
+console.log(cacheM5Large.memoryGiB);   // 6.38
+console.log(cacheM5Large.vCPUs);       // 2
+console.log(cacheM5Large.category);    // 'general_purpose'
 ```

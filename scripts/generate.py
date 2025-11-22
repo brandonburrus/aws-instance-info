@@ -138,8 +138,23 @@ class InstanceDetails:
     instanceType: str
     family: str
     category: str
-    familySummary: FamilySummary
-    performance: PerformanceSpec
+    # Flattened familySummary fields
+    hypervisor: str
+    processorArchitecture: str
+    metalAvailable: bool
+    dedicatedHosts: bool
+    spot: bool
+    hibernation: bool
+    operatingSystems: list[str]
+    # Flattened performance fields
+    memoryGiB: float
+    processor: str
+    vCPUs: int
+    cpuCores: int
+    threadsPerCore: int
+    accelerators: str | None
+    acceleratorMemory: str | None
+    # Nested specs
     network: NetworkSpec
     ebs: EBSSpec
     instanceStore: InstanceStoreSpec | None
@@ -150,14 +165,22 @@ class InstanceDetails:
 class FamilyData:
     family: str
     category: str
-    summary: FamilySummary
     instanceTypes: list[str]
-    specifications: dict[str, dict] = field(default_factory=dict)
+    hypervisor: str
+    processorArchitecture: str
+    metalAvailable: bool
+    dedicatedHosts: bool
+    spot: bool
+    hibernation: bool
+    operatingSystems: list[str]
 
 
 # === RDS Data Classes ===
 @dataclass
-class RDSInstanceSpec:
+class RDSInstanceDetails:
+    instanceClass: str
+    family: str
+    category: str
     vCPUs: int
     memoryGiB: float
     networkBandwidthGbps: str
@@ -165,24 +188,18 @@ class RDSInstanceSpec:
 
 
 @dataclass
-class RDSInstanceDetails:
-    instanceClass: str
-    family: str
-    category: str
-    spec: RDSInstanceSpec
-
-
-@dataclass
 class RDSFamilyData:
     family: str
     category: str
     instanceClasses: list[str]
-    specifications: dict[str, dict] = field(default_factory=dict)
 
 
 # === Elasticache Data Classes ===
 @dataclass
-class ElastiCacheNodeSpec:
+class ElastiCacheNodeDetails:
+    nodeType: str
+    family: str
+    category: str
     vCPUs: int | None
     memoryGiB: float | None
     networkPerformance: str
@@ -191,19 +208,10 @@ class ElastiCacheNodeSpec:
 
 
 @dataclass
-class ElastiCacheNodeDetails:
-    nodeType: str
-    family: str
-    category: str
-    spec: ElastiCacheNodeSpec
-
-
-@dataclass
 class ElastiCacheFamilyData:
     family: str
     category: str
     nodeTypes: list[str]
-    specifications: dict[str, dict] = field(default_factory=dict)
 
 
 # === Text Cleaning Functions ===
@@ -639,15 +647,32 @@ def process_category_data(raw_data: dict, category: str) -> dict[str, InstanceDe
                 operatingSystems=[],
             )
 
+        perf = performance.get(
+            instance_type,
+            PerformanceSpec(0, "", 0, 0, 1, None, None),
+        )
+
         instances[instance_type] = InstanceDetails(
             instanceType=instance_type,
             family=family_name,
             category=category,
-            familySummary=family_summary,
-            performance=performance.get(
-                instance_type,
-                PerformanceSpec(0, "", 0, 0, 1, None, None),
-            ),
+            # Flattened familySummary fields
+            hypervisor=family_summary.hypervisor,
+            processorArchitecture=family_summary.processorArchitecture,
+            metalAvailable=family_summary.metalAvailable,
+            dedicatedHosts=family_summary.dedicatedHosts,
+            spot=family_summary.spot,
+            hibernation=family_summary.hibernation,
+            operatingSystems=family_summary.operatingSystems,
+            # Flattened performance fields
+            memoryGiB=perf.memoryGiB,
+            processor=perf.processor,
+            vCPUs=perf.vCPUs,
+            cpuCores=perf.cpuCores,
+            threadsPerCore=perf.threadsPerCore,
+            accelerators=perf.accelerators,
+            acceleratorMemory=perf.acceleratorMemory,
+            # Nested specs
             network=network.get(
                 instance_type,
                 NetworkSpec("", False, False, False, 1, 1, 1, False),
@@ -676,23 +701,17 @@ def group_instances_by_family(
             families[family_name] = FamilyData(
                 family=family_name,
                 category=details.category,
-                summary=details.familySummary,
                 instanceTypes=[],
-                specifications={},
+                hypervisor=details.hypervisor,
+                processorArchitecture=details.processorArchitecture,
+                metalAvailable=details.metalAvailable,
+                dedicatedHosts=details.dedicatedHosts,
+                spot=details.spot,
+                hibernation=details.hibernation,
+                operatingSystems=details.operatingSystems,
             )
 
         families[family_name].instanceTypes.append(instance_type)
-
-        # Store specs without redundant family info
-        families[family_name].specifications[instance_type] = {
-            "performance": asdict(details.performance),
-            "network": serialize_dataclass(details.network),
-            "ebs": serialize_dataclass(details.ebs),
-            "instanceStore": serialize_dataclass(details.instanceStore)
-            if details.instanceStore
-            else None,
-            "security": asdict(details.security),
-        }
 
     # Sort instance types within each family
     for family in families.values():
@@ -793,37 +812,6 @@ def parse_rds_page(html: str) -> list[dict]:
     return all_instances
 
 
-def build_rds_instance_spec(raw: dict) -> RDSInstanceSpec:
-    """Build RDSInstanceSpec from raw parsed data."""
-    # Parse vCPUs
-    vcpus_str = raw.get("vcpu", raw.get("vcpus", "0"))
-    try:
-        vcpus = int(vcpus_str)
-    except (ValueError, TypeError):
-        vcpus = 0
-
-    # Parse memory
-    memory_str = raw.get("memory_gib", raw.get("memory", "0"))
-    try:
-        # Handle formats like "8" or "8.0"
-        memory = float(str(memory_str).replace(",", ""))
-    except (ValueError, TypeError):
-        memory = 0.0
-
-    # Network bandwidth
-    network = raw.get("network_bandwidth_gbps", raw.get("network_bandwidth", ""))
-
-    # EBS bandwidth
-    ebs = raw.get("max_ebs_bandwidth_mbps", raw.get("ebs_bandwidth", ""))
-
-    return RDSInstanceSpec(
-        vCPUs=vcpus,
-        memoryGiB=memory,
-        networkBandwidthGbps=str(network),
-        ebsBandwidthMbps=str(ebs),
-    )
-
-
 def process_rds_data(raw_instances: list[dict]) -> dict[str, RDSInstanceDetails]:
     """Process raw RDS data into RDSInstanceDetails objects."""
     instances = {}
@@ -835,13 +823,35 @@ def process_rds_data(raw_instances: list[dict]) -> dict[str, RDSInstanceDetails]
 
         family = extract_rds_family(instance_class)
         category = determine_rds_category(family)
-        spec = build_rds_instance_spec(raw)
+
+        # Parse vCPUs
+        vcpus_str = raw.get("vcpu", raw.get("vcpus", "0"))
+        try:
+            vcpus = int(vcpus_str)
+        except (ValueError, TypeError):
+            vcpus = 0
+
+        # Parse memory
+        memory_str = raw.get("memory_gib", raw.get("memory", "0"))
+        try:
+            memory = float(str(memory_str).replace(",", ""))
+        except (ValueError, TypeError):
+            memory = 0.0
+
+        # Network bandwidth
+        network = raw.get("network_bandwidth_gbps", raw.get("network_bandwidth", ""))
+
+        # EBS bandwidth
+        ebs = raw.get("max_ebs_bandwidth_mbps", raw.get("ebs_bandwidth", ""))
 
         instances[instance_class] = RDSInstanceDetails(
             instanceClass=instance_class,
             family=family,
             category=category,
-            spec=spec,
+            vCPUs=vcpus,
+            memoryGiB=memory,
+            networkBandwidthGbps=str(network),
+            ebsBandwidthMbps=str(ebs),
         )
 
     return instances
@@ -861,11 +871,9 @@ def group_rds_instances_by_family(
                 family=family_name,
                 category=details.category,
                 instanceClasses=[],
-                specifications={},
             )
 
         families[family_name].instanceClasses.append(instance_class)
-        families[family_name].specifications[instance_class] = asdict(details.spec)
 
     # Sort instance classes within each family
     for family in families.values():
@@ -966,42 +974,6 @@ def parse_elasticache_page(html: str) -> list[dict]:
     return all_nodes
 
 
-def build_elasticache_node_spec(raw: dict) -> ElastiCacheNodeSpec:
-    """Build ElastiCacheNodeSpec from raw parsed data."""
-    # Parse vCPUs (may not be present for all node types)
-    vcpus_str = raw.get("vcpus", raw.get("vcpu", ""))
-    vcpus = None
-    if vcpus_str:
-        try:
-            vcpus = int(vcpus_str)
-        except (ValueError, TypeError):
-            pass
-
-    # Parse memory
-    memory_str = raw.get("memory_gib", raw.get("memory", ""))
-    memory = None
-    if memory_str:
-        try:
-            memory = float(str(memory_str).replace(",", ""))
-        except (ValueError, TypeError):
-            pass
-
-    # Network performance
-    network = raw.get("network_performance", "")
-
-    # Bandwidth
-    baseline = raw.get("baseline_bandwidth_gbps", raw.get("baseline_gbps", ""))
-    burst = raw.get("burst_bandwidth_gbps", raw.get("burst_gbps", ""))
-
-    return ElastiCacheNodeSpec(
-        vCPUs=vcpus,
-        memoryGiB=memory,
-        networkPerformance=str(network) if network else "",
-        baselineBandwidthGbps=str(baseline) if baseline else None,
-        burstBandwidthGbps=str(burst) if burst else None,
-    )
-
-
 def process_elasticache_data(raw_nodes: list[dict]) -> dict[str, ElastiCacheNodeDetails]:
     """Process raw Elasticache data into ElastiCacheNodeDetails objects."""
     nodes = {}
@@ -1017,13 +989,41 @@ def process_elasticache_data(raw_nodes: list[dict]) -> dict[str, ElastiCacheNode
 
         family = extract_elasticache_family(node_type)
         category = determine_elasticache_category(family)
-        spec = build_elasticache_node_spec(raw)
+
+        # Parse vCPUs (may not be present for all node types)
+        vcpus_str = raw.get("vcpus", raw.get("vcpu", ""))
+        vcpus = None
+        if vcpus_str:
+            try:
+                vcpus = int(vcpus_str)
+            except (ValueError, TypeError):
+                pass
+
+        # Parse memory
+        memory_str = raw.get("memory_gib", raw.get("memory", ""))
+        memory = None
+        if memory_str:
+            try:
+                memory = float(str(memory_str).replace(",", ""))
+            except (ValueError, TypeError):
+                pass
+
+        # Network performance
+        network = raw.get("network_performance", "")
+
+        # Bandwidth
+        baseline = raw.get("baseline_bandwidth_gbps", raw.get("baseline_gbps", ""))
+        burst = raw.get("burst_bandwidth_gbps", raw.get("burst_gbps", ""))
 
         nodes[node_type] = ElastiCacheNodeDetails(
             nodeType=node_type,
             family=family,
             category=category,
-            spec=spec,
+            vCPUs=vcpus,
+            memoryGiB=memory,
+            networkPerformance=str(network) if network else "",
+            baselineBandwidthGbps=str(baseline) if baseline else None,
+            burstBandwidthGbps=str(burst) if burst else None,
         )
 
     return nodes
@@ -1043,11 +1043,9 @@ def group_elasticache_nodes_by_family(
                 family=family_name,
                 category=details.category,
                 nodeTypes=[],
-                specifications={},
             )
 
         families[family_name].nodeTypes.append(node_type)
-        families[family_name].specifications[node_type] = asdict(details.spec)
 
     # Sort node types within each family
     for family in families.values():
@@ -1076,8 +1074,23 @@ def serialize_instance_details(details: InstanceDetails) -> dict:
         "instanceType": details.instanceType,
         "family": details.family,
         "category": details.category,
-        "familySummary": asdict(details.familySummary),
-        "performance": asdict(details.performance),
+        # Flattened familySummary fields
+        "hypervisor": details.hypervisor,
+        "processorArchitecture": details.processorArchitecture,
+        "metalAvailable": details.metalAvailable,
+        "dedicatedHosts": details.dedicatedHosts,
+        "spot": details.spot,
+        "hibernation": details.hibernation,
+        "operatingSystems": details.operatingSystems,
+        # Flattened performance fields
+        "memoryGiB": details.memoryGiB,
+        "processor": details.processor,
+        "vCPUs": details.vCPUs,
+        "cpuCores": details.cpuCores,
+        "threadsPerCore": details.threadsPerCore,
+        "accelerators": details.accelerators,
+        "acceleratorMemory": details.acceleratorMemory,
+        # Nested specs
         "network": serialize_dataclass(details.network),
         "ebs": serialize_dataclass(details.ebs),
         "instanceStore": serialize_dataclass(details.instanceStore)
@@ -1092,9 +1105,14 @@ def serialize_family_data(family: FamilyData) -> dict:
     return {
         "family": family.family,
         "category": family.category,
-        "summary": asdict(family.summary),
         "instanceTypes": family.instanceTypes,
-        "specifications": family.specifications,
+        "hypervisor": family.hypervisor,
+        "processorArchitecture": family.processorArchitecture,
+        "metalAvailable": family.metalAvailable,
+        "dedicatedHosts": family.dedicatedHosts,
+        "spot": family.spot,
+        "hibernation": family.hibernation,
+        "operatingSystems": family.operatingSystems,
     }
 
 
@@ -1104,7 +1122,10 @@ def serialize_rds_instance_details(details: RDSInstanceDetails) -> dict:
         "instanceClass": details.instanceClass,
         "family": details.family,
         "category": details.category,
-        "spec": asdict(details.spec),
+        "vCPUs": details.vCPUs,
+        "memoryGiB": details.memoryGiB,
+        "networkBandwidthGbps": details.networkBandwidthGbps,
+        "ebsBandwidthMbps": details.ebsBandwidthMbps,
     }
 
 
@@ -1114,7 +1135,6 @@ def serialize_rds_family_data(family: RDSFamilyData) -> dict:
         "family": family.family,
         "category": family.category,
         "instanceClasses": family.instanceClasses,
-        "specifications": family.specifications,
     }
 
 
@@ -1124,7 +1144,11 @@ def serialize_elasticache_node_details(details: ElastiCacheNodeDetails) -> dict:
         "nodeType": details.nodeType,
         "family": details.family,
         "category": details.category,
-        "spec": asdict(details.spec),
+        "vCPUs": details.vCPUs,
+        "memoryGiB": details.memoryGiB,
+        "networkPerformance": details.networkPerformance,
+        "baselineBandwidthGbps": details.baselineBandwidthGbps,
+        "burstBandwidthGbps": details.burstBandwidthGbps,
     }
 
 
@@ -1134,7 +1158,6 @@ def serialize_elasticache_family_data(family: ElastiCacheFamilyData) -> dict:
         "family": family.family,
         "category": family.category,
         "nodeTypes": family.nodeTypes,
-        "specifications": family.specifications,
     }
 
 
@@ -1349,26 +1372,6 @@ export interface VolumeLimitSpec {
   limitType: string;
 }
 
-export interface EC2FamilySummary {
-  hypervisor: EC2Hypervisor;
-  processorArchitecture: EC2ProcessorArchitecture;
-  metalAvailable: boolean;
-  dedicatedHosts: boolean;
-  spot: boolean;
-  hibernation: boolean;
-  operatingSystems: EC2OperatingSystem[];
-}
-
-export interface EC2PerformanceSpec {
-  memoryGiB: number;
-  processor: EC2Processor;
-  vCPUs: number;
-  cpuCores: number;
-  threadsPerCore: number;
-  accelerators: EC2Accelerator | null;
-  acceleratorMemory: string | null;
-}
-
 export interface EC2NetworkSpec {
   bandwidthGbps: BandwidthSpec | string;
   efa: boolean;
@@ -1410,16 +1413,23 @@ export interface EC2InstanceDetails {
   instanceType: EC2InstanceType;
   family: EC2InstanceFamily;
   category: EC2Category;
-  familySummary: EC2FamilySummary;
-  performance: EC2PerformanceSpec;
-  network: EC2NetworkSpec;
-  ebs: EC2EBSSpec;
-  instanceStore: EC2InstanceStoreSpec | null;
-  security: EC2SecuritySpec;
-}
-
-export interface EC2InstanceSpec {
-  performance: EC2PerformanceSpec;
+  // Flattened familySummary fields
+  hypervisor: EC2Hypervisor;
+  processorArchitecture: EC2ProcessorArchitecture;
+  metalAvailable: boolean;
+  dedicatedHosts: boolean;
+  spot: boolean;
+  hibernation: boolean;
+  operatingSystems: EC2OperatingSystem[];
+  // Flattened performance fields
+  memoryGiB: number;
+  processor: EC2Processor;
+  vCPUs: number;
+  cpuCores: number;
+  threadsPerCore: number;
+  accelerators: EC2Accelerator | null;
+  acceleratorMemory: string | null;
+  // Nested specs
   network: EC2NetworkSpec;
   ebs: EC2EBSSpec;
   instanceStore: EC2InstanceStoreSpec | null;
@@ -1429,9 +1439,14 @@ export interface EC2InstanceSpec {
 export interface EC2FamilyData {
   family: EC2InstanceFamily;
   category: EC2Category;
-  summary: EC2FamilySummary;
   instanceTypes: EC2InstanceType[];
-  specifications: Record<EC2InstanceType, EC2InstanceSpec>;
+  hypervisor: EC2Hypervisor;
+  processorArchitecture: EC2ProcessorArchitecture;
+  metalAvailable: boolean;
+  dedicatedHosts: boolean;
+  spot: boolean;
+  hibernation: boolean;
+  operatingSystems: EC2OperatingSystem[];
 }
 
 export interface EC2Info {
@@ -1454,25 +1469,20 @@ export interface EC2Info {
         # RDS Interfaces
         """// === RDS Interfaces ===
 
-export interface RDSInstanceSpec {
+export interface RDSInstanceDetails {
+  instanceClass: RDSInstanceClass;
+  family: RDSInstanceFamily;
+  category: RDSCategory;
   vCPUs: number;
   memoryGiB: number;
   networkBandwidthGbps: string;
   ebsBandwidthMbps: string;
 }
 
-export interface RDSInstanceDetails {
-  instanceClass: RDSInstanceClass;
-  family: RDSInstanceFamily;
-  category: RDSCategory;
-  spec: RDSInstanceSpec;
-}
-
 export interface RDSFamilyData {
   family: RDSInstanceFamily;
   category: RDSCategory;
   instanceClasses: RDSInstanceClass[];
-  specifications: Record<RDSInstanceClass, RDSInstanceSpec>;
 }
 
 export interface RDSInfo {
@@ -1494,7 +1504,10 @@ export interface RDSInfo {
         # Elasticache Interfaces
         """// === Elasticache Interfaces ===
 
-export interface ElastiCacheNodeSpec {
+export interface ElastiCacheNodeDetails {
+  nodeType: ElastiCacheNodeType;
+  family: ElastiCacheFamily;
+  category: ElastiCacheCategory;
   vCPUs: number | null;
   memoryGiB: number | null;
   networkPerformance: string;
@@ -1502,18 +1515,10 @@ export interface ElastiCacheNodeSpec {
   burstBandwidthGbps: string | null;
 }
 
-export interface ElastiCacheNodeDetails {
-  nodeType: ElastiCacheNodeType;
-  family: ElastiCacheFamily;
-  category: ElastiCacheCategory;
-  spec: ElastiCacheNodeSpec;
-}
-
 export interface ElastiCacheFamilyData {
   family: ElastiCacheFamily;
   category: ElastiCacheCategory;
   nodeTypes: ElastiCacheNodeType[];
-  specifications: Record<ElastiCacheNodeType, ElastiCacheNodeSpec>;
 }
 
 export interface ElastiCacheInfo {
