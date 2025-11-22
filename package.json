@@ -41,7 +41,8 @@
     "test:watch": "vitest",
     "prepare": "husky",
     "format": "biome format",
-    "format:fix": "biome format --write"
+    "format:fix": "biome format --write",
+    "docgen": "typedoc"
   },
   "lint-staged": {
     "*.ts": [

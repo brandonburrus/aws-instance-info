@@ -11,9 +11,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```
 lib/
   index.ts        # Main entry: re-exports all from ec2.ts, rds.ts, elasticache.ts
-  ec2.ts          # EC2 API: getEC2Instance, getEC2Family, getEC2Info, etc.
-  rds.ts          # RDS API: getRDSInstance, getRDSFamily, getRDSInfo, etc.
-  elasticache.ts  # Elasticache API: getElastiCacheNode, getElastiCacheFamily, etc.
+  ec2.ts          # EC2 API: getEC2InstanceInfo, getEC2Family, getEC2Info, etc.
+  rds.ts          # RDS API: getRDSInstanceInfo, getRDSFamily, getRDSInfo, etc.
+  elasticache.ts  # Elasticache API: getElastiCacheNodeInfo, getElastiCacheFamily, etc.
   types.ts        # Auto-generated TypeScript types (DO NOT EDIT)
 
 data/             # Generated JSON data (DO NOT EDIT)
@@ -82,7 +82,7 @@ All JSON keys and TypeScript interfaces use **camelCase**:
 ## API Functions
 
 ### EC2 Functions
-- `getEC2Instance(type)` - Get details for a specific EC2 instance type
+- `getEC2InstanceInfo(type)` - Get details for a specific EC2 instance type
 - `getEC2Family(family)` - Get all data for an EC2 instance family
 - `getEC2Info()` - Get manifest of all EC2 families, instances, categories
 - `getAllEC2Families()`, `getAllEC2InstanceTypes()`, `getAllEC2Categories()`
@@ -91,7 +91,7 @@ All JSON keys and TypeScript interfaces use **camelCase**:
 - `clearEC2Cache()`, `getEC2CacheStats()`
 
 ### RDS Functions
-- `getRDSInstance(class)` - Get details for a specific RDS instance class
+- `getRDSInstanceInfo(class)` - Get details for a specific RDS instance class
 - `getRDSFamily(family)` - Get all data for an RDS instance family
 - `getRDSInfo()` - Get manifest of all RDS families, instances, categories
 - `getAllRDSFamilies()`, `getAllRDSInstanceClasses()`, `getAllRDSCategories()`
@@ -100,7 +100,7 @@ All JSON keys and TypeScript interfaces use **camelCase**:
 - `clearRDSCache()`, `getRDSCacheStats()`
 
 ### Elasticache Functions
-- `getElastiCacheNode(nodeType)` - Get details for a specific Elasticache node type
+- `getElastiCacheNodeInfo(nodeType)` - Get details for a specific Elasticache node type
 - `getElastiCacheFamily(family)` - Get all data for an Elasticache node family
 - `getElastiCacheInfo()` - Get manifest of all Elasticache families, node types, categories
 - `getAllElastiCacheFamilies()`, `getAllElastiCacheNodeTypes()`, `getAllElastiCacheCategories()`

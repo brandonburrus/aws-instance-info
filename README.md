@@ -23,12 +23,12 @@ npm install aws-instance-info
 Get details for a specific EC2 instance type:
 
 ```typescript
-import { getEC2Instance } from 'aws-instance-info';
+import { getEC2InstanceInfo } from 'aws-instance-info';
 
-const instance = await getEC2Instance('m5.large');
-console.log(instance.memoryGiB);  // 8
-console.log(instance.vCPUs);      // 2
-console.log(instance.category);   // 'general_purpose'
+const instance = getEC2InstanceInfo('m5.large');
+console.log(instance.performance.memoryGiB);  // 8
+console.log(instance.performance.vCPUs);      // 2
+console.log(instance.category);               // 'general_purpose'
 ```
 
 Get all instances in a family:
@@ -36,7 +36,7 @@ Get all instances in a family:
 ```typescript
 import { getEC2Family } from 'aws-instance-info';
 
-const family = await getEC2Family('M5');
+const family = getEC2Family('M5');
 console.log(family.instances);  // Array of all M5 instance types
 console.log(family.summary);    // Family-level summary
 ```
@@ -46,12 +46,12 @@ console.log(family.summary);    // Family-level summary
 Get details for a specific RDS instance class:
 
 ```typescript
-import { getRDSInstance } from 'aws-instance-info';
+import { getRDSInstanceInfo } from 'aws-instance-info';
 
-const instance = await getRDSInstance('db.m5.large');
-console.log(instance.memoryGiB);  // 8
-console.log(instance.vCPUs);      // 2
-console.log(instance.category);   // 'general_purpose'
+const instance = getRDSInstanceInfo('db.m5.large');
+console.log(instance.spec.memoryGiB);  // 8
+console.log(instance.spec.vCPUs);      // 2
+console.log(instance.category);        // 'general_purpose'
 ```
 
 List all RDS instance classes:
@@ -59,7 +59,7 @@ List all RDS instance classes:
 ```typescript
 import { getAllRDSInstanceClasses } from 'aws-instance-info';
 
-const classes = await getAllRDSInstanceClasses();
+const classes = getAllRDSInstanceClasses();
 console.log(classes);  // ['db.m5.large', 'db.m5.xlarge', ...]
 ```
 
@@ -68,10 +68,10 @@ console.log(classes);  // ['db.m5.large', 'db.m5.xlarge', ...]
 Get details for a specific ElastiCache node type:
 
 ```typescript
-import { getElastiCacheNode } from 'aws-instance-info';
+import { getElastiCacheNodeInfo } from 'aws-instance-info';
 
-const node = await getElastiCacheNode('cache.m5.large');
-console.log(node.memoryGiB);   // 6.38
-console.log(node.vCPUs);       // 2
-console.log(node.category);    // 'general_purpose'
+const node = getElastiCacheNodeInfo('cache.m5.large');
+console.log(node.spec.memoryGiB);   // 6.38
+console.log(node.spec.vCPUs);       // 2
+console.log(node.category);         // 'general_purpose'
 ```

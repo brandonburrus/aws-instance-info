@@ -1,8 +1,9 @@
-import { readFile } from 'node:fs/promises'
+import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { LRUCache } from 'lru-cache'
 
+import { EC2_FAMILY_CACHE_SIZE, EC2_INSTANCE_CACHE_SIZE } from './constants.js'
 import type {
   EC2Category,
   EC2FamilyData,
@@ -18,48 +19,73 @@ const __dirname = dirname(__filename)
 const DATA_DIR = join(__dirname, '..', 'data', 'ec2')
 
 /* Internal Caches */
-const instanceCache = new LRUCache<string, EC2InstanceDetails>({ max: 512 })
-const familyCache = new LRUCache<string, EC2FamilyData>({ max: 256 })
+const instanceCache = new LRUCache<string, EC2InstanceDetails>({
+  max: EC2_INSTANCE_CACHE_SIZE,
+})
+const familyCache = new LRUCache<string, EC2FamilyData>({
+  max: EC2_FAMILY_CACHE_SIZE,
+})
 let infoCache: EC2Info | null = null
 
 /* Internal helper function to load and parse JSON files */
-async function loadJson<T>(relativePath: string): Promise<T> {
+function loadJson<T>(relativePath: string): T {
   const fullPath = join(DATA_DIR, relativePath)
-  const content = await readFile(fullPath, 'utf-8')
+  const content = readFileSync(fullPath, 'utf-8')
   return JSON.parse(content) as T
 }
 
 /**
  * Get the EC2 info manifest containing lists of all families and instance types.
  * This is a lightweight file that can be used to enumerate available data.
+ *
+ * @returns EC2Info object with families, instances, and categories arrays
+ *
+ * @example
+ * ```typescript
+ * import { getEC2Info } from 'aws-instance-info'
+ *
+ * const info = getEC2Info()
+ * console.log(info.families) // ['M5', 'C7', 'R6i', ...]
+ * console.log(info.instances) // ['m5.large', 'c7.xlarge', ...]
+ * console.log(info.categories) // ['general_purpose', 'compute_optimized', ...]
+ * ```
  */
-export async function getEC2Info(): Promise<EC2Info> {
+export function getEC2Info(): EC2Info {
   if (infoCache) {
     return infoCache
   }
 
-  infoCache = await loadJson<EC2Info>('info.json')
+  infoCache = loadJson<EC2Info>('info.json')
   return infoCache
 }
 
 /**
  * Get detailed information for a specific EC2 instance type.
- * Loads only the JSON file for the requested instance.
+ * Loads only the JSON file for the requested instance. Results are cached using LRU.
  *
  * @param instanceType - The instance type (e.g., "m5.large")
- * @returns Instance details
+ * @returns Instance details including performance, networking, EBS, and security specs
+ *
+ * @example
+ * ```typescript
+ * import { getEC2InstanceInfo } from 'aws-instance-info'
+ *
+ * const instance = getEC2InstanceInfo('m5.large')
+ * console.log(instance.instanceType) // 'm5.large'
+ * console.log(instance.performance.vCPUs) // 2
+ * console.log(instance.performance.memoryGiB) // 8
+ * console.log(instance.network.bandwidthGbps) // { min: 0.75, max: 10 }
+ * ```
  */
-export async function getEC2Instance(
+export function getEC2InstanceInfo(
   instanceType: EC2InstanceType,
-): Promise<EC2InstanceDetails> {
+): EC2InstanceDetails {
   const cached = instanceCache.get(instanceType)
   if (cached) {
     return cached
   }
 
-  const data = await loadJson<EC2InstanceDetails>(
-    `instances/${instanceType}.json`,
-  )
+  const data = loadJson<EC2InstanceDetails>(`instances/${instanceType}.json`)
   instanceCache.set(instanceType, data)
   return data
 }
@@ -67,19 +93,29 @@ export async function getEC2Instance(
 /**
  * Get all data for an EC2 instance family.
  * Includes the family summary and specifications for all instance types in the family.
+ * Results are cached using LRU.
  *
  * @param family - The instance family (e.g., "M5")
  * @returns Family data including all instance specifications
+ *
+ * @example
+ * ```typescript
+ * import { getEC2Family } from 'aws-instance-info'
+ *
+ * const family = getEC2Family('M5')
+ * console.log(family.category) // 'general_purpose'
+ * console.log(family.instanceTypes) // ['m5.large', 'm5.xlarge', ...]
+ * console.log(family.familySummary.description) // 'General Purpose...'
+ * console.log(family.instances['m5.large'].performance.vCPUs) // 2
+ * ```
  */
-export async function getEC2Family(
-  family: EC2InstanceFamily,
-): Promise<EC2FamilyData> {
+export function getEC2Family(family: EC2InstanceFamily): EC2FamilyData {
   const cached = familyCache.get(family)
   if (cached) {
     return cached
   }
 
-  const data = await loadJson<EC2FamilyData>(`families/${family}.json`)
+  const data = loadJson<EC2FamilyData>(`families/${family}.json`)
   familyCache.set(family, data)
   return data
 }
@@ -89,12 +125,20 @@ export async function getEC2Family(
  * This loads the family file but only returns the list of instance types.
  *
  * @param family - The instance family (e.g., "M5")
- * @returns Array of instance type names
+ * @returns Array of instance type names in the family
+ *
+ * @example
+ * ```typescript
+ * import { getEC2FamilyInstanceTypes } from 'aws-instance-info'
+ *
+ * const types = getEC2FamilyInstanceTypes('M5')
+ * console.log(types) // ['m5.large', 'm5.xlarge', 'm5.2xlarge', ...]
+ * ```
  */
-export async function getEC2FamilyInstanceTypes(
+export function getEC2FamilyInstanceTypes(
   family: EC2InstanceFamily,
-): Promise<EC2InstanceType[]> {
-  const familyData = await getEC2Family(family)
+): EC2InstanceType[] {
+  const familyData = getEC2Family(family)
   return familyData.instanceTypes
 }
 
@@ -103,11 +147,20 @@ export async function getEC2FamilyInstanceTypes(
  *
  * @param family - The instance family (e.g., "M5")
  * @returns The category (e.g., "general_purpose")
+ *
+ * @example
+ * ```typescript
+ * import { getEC2FamilyCategory } from 'aws-instance-info'
+ *
+ * const category = getEC2FamilyCategory('M5')
+ * console.log(category) // 'general_purpose'
+ *
+ * const category2 = getEC2FamilyCategory('C7')
+ * console.log(category2) // 'compute_optimized'
+ * ```
  */
-export async function getEC2FamilyCategory(
-  family: EC2InstanceFamily,
-): Promise<EC2Category> {
-  const familyData = await getEC2Family(family)
+export function getEC2FamilyCategory(family: EC2InstanceFamily): EC2Category {
+  const familyData = getEC2Family(family)
   return familyData.category
 }
 
@@ -115,9 +168,18 @@ export async function getEC2FamilyCategory(
  * Get all available EC2 instance families.
  *
  * @returns Array of all family names
+ *
+ * @example
+ * ```typescript
+ * import { getAllEC2Families } from 'aws-instance-info'
+ *
+ * const families = getAllEC2Families()
+ * console.log(families) // ['M5', 'M5a', 'M5ad', 'M5d', 'C7', 'C7g', ...]
+ * console.log(families.length) // ~150
+ * ```
  */
-export async function getAllEC2Families(): Promise<EC2InstanceFamily[]> {
-  const info = await getEC2Info()
+export function getAllEC2Families(): EC2InstanceFamily[] {
+  const info = getEC2Info()
   return info.families
 }
 
@@ -125,9 +187,18 @@ export async function getAllEC2Families(): Promise<EC2InstanceFamily[]> {
  * Get all available EC2 instance types.
  *
  * @returns Array of all instance type names
+ *
+ * @example
+ * ```typescript
+ * import { getAllEC2InstanceTypes } from 'aws-instance-info'
+ *
+ * const types = getAllEC2InstanceTypes()
+ * console.log(types) // ['m5.large', 'm5.xlarge', 'c7.2xlarge', ...]
+ * console.log(types.length) // ~1000
+ * ```
  */
-export async function getAllEC2InstanceTypes(): Promise<EC2InstanceType[]> {
-  const info = await getEC2Info()
+export function getAllEC2InstanceTypes(): EC2InstanceType[] {
+  const info = getEC2Info()
   return info.instances
 }
 
@@ -135,9 +206,19 @@ export async function getAllEC2InstanceTypes(): Promise<EC2InstanceType[]> {
  * Get all available EC2 categories.
  *
  * @returns Array of all category names
+ *
+ * @example
+ * ```typescript
+ * import { getAllEC2Categories } from 'aws-instance-info'
+ *
+ * const categories = getAllEC2Categories()
+ * console.log(categories)
+ * // ['general_purpose', 'compute_optimized', 'memory_optimized',
+ * //  'storage_optimized', 'accelerated_computing', 'hpc']
+ * ```
  */
-export async function getAllEC2Categories(): Promise<EC2Category[]> {
-  const info = await getEC2Info()
+export function getAllEC2Categories(): EC2Category[] {
+  const info = getEC2Info()
   return info.categories
 }
 
@@ -145,12 +226,19 @@ export async function getAllEC2Categories(): Promise<EC2Category[]> {
  * Check if an EC2 instance type exists in the dataset.
  *
  * @param instanceType - The instance type to check
- * @returns True if the instance type exists
+ * @returns True if the instance type exists, false otherwise
+ *
+ * @example
+ * ```typescript
+ * import { isValidEC2InstanceType } from 'aws-instance-info'
+ *
+ * console.log(isValidEC2InstanceType('m5.large')) // true
+ * console.log(isValidEC2InstanceType('m5.invalid')) // false
+ * console.log(isValidEC2InstanceType('t3.micro')) // true
+ * ```
  */
-export async function isValidEC2InstanceType(
-  instanceType: string,
-): Promise<boolean> {
-  const info = await getEC2Info()
+export function isValidEC2InstanceType(instanceType: string): boolean {
+  const info = getEC2Info()
   return info.instances.includes(instanceType as EC2InstanceType)
 }
 
@@ -158,49 +246,82 @@ export async function isValidEC2InstanceType(
  * Check if an EC2 instance family exists in the dataset.
  *
  * @param family - The family name to check
- * @returns True if the family exists
+ * @returns True if the family exists, false otherwise
+ *
+ * @example
+ * ```typescript
+ * import { isValidEC2Family } from 'aws-instance-info'
+ *
+ * console.log(isValidEC2Family('M5')) // true
+ * console.log(isValidEC2Family('C7')) // true
+ * console.log(isValidEC2Family('Invalid')) // false
+ * ```
  */
-export async function isValidEC2Family(family: string): Promise<boolean> {
-  const info = await getEC2Info()
+export function isValidEC2Family(family: string): boolean {
+  const info = getEC2Info()
   return info.families.includes(family as EC2InstanceFamily)
 }
 
 /**
- * Get multiple EC2 instances at once.
- * More efficient than calling getEC2Instance() multiple times as it runs in parallel.
+ * Get multiple EC2 instances at once. More efficient than calling getEC2InstanceInfo
+ * multiple times for batch operations.
  *
  * @param instanceTypes - Array of instance types to fetch
  * @returns Map of instance type to details
+ *
+ * @example
+ * ```typescript
+ * import { getEC2Instances } from 'aws-instance-info'
+ *
+ * const instances = getEC2Instances(['m5.large', 'm5.xlarge', 'c7.2xlarge'])
+ *
+ * for (const [type, details] of instances) {
+ *   console.log(`${type}: ${details.performance.vCPUs} vCPUs`)
+ * }
+ * // m5.large: 2 vCPUs
+ * // m5.xlarge: 4 vCPUs
+ * // c7.2xlarge: 8 vCPUs
+ * ```
  */
-export async function getEC2Instances(
+export function getEC2Instances(
   instanceTypes: EC2InstanceType[],
-): Promise<Map<EC2InstanceType, EC2InstanceDetails>> {
-  const results = await Promise.all(
-    instanceTypes.map(async type => {
-      const details = await getEC2Instance(type)
-      return [type, details] as const
-    }),
-  )
+): Map<EC2InstanceType, EC2InstanceDetails> {
+  const results = instanceTypes.map(type => {
+    const details = getEC2InstanceInfo(type)
+    return [type, details] as const
+  })
 
   return new Map(results)
 }
 
 /**
- * Get multiple EC2 families at once.
- * More efficient than calling getEC2Family() multiple times as it runs in parallel.
+ * Get multiple EC2 families at once. More efficient than calling getEC2Family
+ * multiple times for batch operations.
  *
  * @param families - Array of family names to fetch
  * @returns Map of family name to family data
+ *
+ * @example
+ * ```typescript
+ * import { getEC2Families } from 'aws-instance-info'
+ *
+ * const families = getEC2Families(['M5', 'C7', 'R6i'])
+ *
+ * for (const [name, data] of families) {
+ *   console.log(`${name}: ${data.category}, ${data.instanceTypes.length} types`)
+ * }
+ * // M5: general_purpose, 24 types
+ * // C7: compute_optimized, 12 types
+ * // R6i: memory_optimized, 16 types
+ * ```
  */
-export async function getEC2Families(
+export function getEC2Families(
   families: EC2InstanceFamily[],
-): Promise<Map<EC2InstanceFamily, EC2FamilyData>> {
-  const results = await Promise.all(
-    families.map(async family => {
-      const data = await getEC2Family(family)
-      return [family, data] as const
-    }),
-  )
+): Map<EC2InstanceFamily, EC2FamilyData> {
+  const results = families.map(family => {
+    const data = getEC2Family(family)
+    return [family, data] as const
+  })
 
   return new Map(results)
 }
@@ -208,6 +329,17 @@ export async function getEC2Families(
 /**
  * Clear all EC2 cached data.
  * Useful for testing or when you need to free memory.
+ *
+ * @example
+ * ```typescript
+ * import { clearEC2Cache, getEC2CacheStats } from 'aws-instance-info'
+ *
+ * console.log(getEC2CacheStats()) // { instances: 10, families: 3, infoLoaded: true }
+ *
+ * clearEC2Cache()
+ *
+ * console.log(getEC2CacheStats()) // { instances: 0, families: 0, infoLoaded: false }
+ * ```
  */
 export function clearEC2Cache(): void {
   instanceCache.clear()
@@ -218,6 +350,20 @@ export function clearEC2Cache(): void {
 /**
  * Get EC2 cache statistics.
  * Useful for debugging or monitoring memory usage.
+ *
+ * @returns Object with cache statistics
+ *
+ * @example
+ * ```typescript
+ * import { getEC2CacheStats, getEC2InstanceInfo } from 'aws-instance-info'
+ *
+ * getEC2InstanceInfo('m5.large')
+ * getEC2InstanceInfo('m5.xlarge')
+ *
+ * const stats = getEC2CacheStats()
+ * console.log(stats)
+ * // { instances: 2, families: 0, infoLoaded: true }
+ * ```
  */
 export function getEC2CacheStats(): {
   instances: number

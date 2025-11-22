@@ -39,10 +39,20 @@ export type {
   ElastiCacheInfo,
 } from './types.js'
 
+// Re-export cache size constants
+export {
+  EC2_INSTANCE_CACHE_SIZE,
+  EC2_FAMILY_CACHE_SIZE,
+  RDS_INSTANCE_CACHE_SIZE,
+  RDS_FAMILY_CACHE_SIZE,
+  ELASTICACHE_NODE_CACHE_SIZE,
+  ELASTICACHE_FAMILY_CACHE_SIZE,
+} from './constants.js'
+
 // Re-export all EC2 functions
 export {
   getEC2Info,
-  getEC2Instance,
+  getEC2InstanceInfo,
   getEC2Family,
   getEC2FamilyInstanceTypes,
   getEC2FamilyCategory,
@@ -60,7 +70,7 @@ export {
 // Re-export all RDS functions
 export {
   getRDSInfo,
-  getRDSInstance,
+  getRDSInstanceInfo,
   getRDSFamily,
   getRDSFamilyInstanceClasses,
   getRDSFamilyCategory,
@@ -78,7 +88,7 @@ export {
 // Re-export all Elasticache functions
 export {
   getElastiCacheInfo,
-  getElastiCacheNode,
+  getElastiCacheNodeInfo,
   getElastiCacheFamily,
   getElastiCacheFamilyNodeTypes,
   getElastiCacheFamilyCategory,

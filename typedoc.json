@@ -1,0 +1,18 @@
+{
+  "entryPoints": ["lib/index.ts"],
+  "out": "docs",
+  "plugin": [],
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "excludeExternals": true,
+  "readme": "README.md",
+  "name": "aws-instance-info",
+  "includeVersion": true,
+  "navigation": {
+    "includeCategories": true,
+    "includeGroups": true
+  },
+  "categorizeByGroup": false,
+  "sort": ["source-order"],
+  "kindSortOrder": ["Function", "Interface", "TypeAlias", "Variable", "Class"]
+}
