@@ -2,6 +2,8 @@
 
 Get detailed specifications for AWS EC2 instances, RDS instance classes, and ElastiCache node types.
 
+This data is scrapped directly from the specifications published by AWS on their official documentation. All data is saved as local json files which are part of this module, however they are only loaded into memory on demand once, and then cached in an LRU cache.
+
 ## Installation
 
 ```bash
