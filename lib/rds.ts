@@ -1,9 +1,14 @@
 import { readFileSync } from 'node:fs'
-import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
-import { LRUCache } from 'lru-cache'
+import { join } from 'node:path'
 
-import { RDS_FAMILY_CACHE_SIZE, RDS_INSTANCE_CACHE_SIZE } from './constants.js'
+import {
+  RDS_DATA_DIR,
+  clearRDSCache,
+  familyCache,
+  getRDSCacheStats,
+  infoCacheHolder,
+  instanceCache,
+} from './rds.cache.js'
 import type {
   RDSCategory,
   RDSFamilyData,
@@ -13,23 +18,12 @@ import type {
   RDSInstanceFamily,
 } from './types.js'
 
-/* File Paths */
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const DATA_DIR = join(__dirname, '..', 'data', 'rds')
-
-/* Internal Caches */
-const instanceCache = new LRUCache<string, RDSInstanceDetails>({
-  max: RDS_INSTANCE_CACHE_SIZE,
-})
-const familyCache = new LRUCache<string, RDSFamilyData>({
-  max: RDS_FAMILY_CACHE_SIZE,
-})
-let infoCache: RDSInfo | null = null
+/* Re-export cache utilities */
+export { clearRDSCache, getRDSCacheStats }
 
 /* Internal helper function to load and parse JSON files */
 function loadJson<T>(relativePath: string): T {
-  const fullPath = join(DATA_DIR, relativePath)
+  const fullPath = join(RDS_DATA_DIR, relativePath)
   const content = readFileSync(fullPath, 'utf-8')
   return JSON.parse(content) as T
 }
@@ -51,12 +45,12 @@ function loadJson<T>(relativePath: string): T {
  * ```
  */
 export function getRDSInfo(): RDSInfo {
-  if (infoCache) {
-    return infoCache
+  if (infoCacheHolder.value) {
+    return infoCacheHolder.value
   }
 
-  infoCache = loadJson<RDSInfo>('info.json')
-  return infoCache
+  infoCacheHolder.value = loadJson<RDSInfo>('info.json')
+  return infoCacheHolder.value
 }
 
 /**
@@ -320,55 +314,4 @@ export function getRDSFamilies(
   })
 
   return new Map(results)
-}
-
-/**
- * Clear all RDS cached data.
- * Useful for testing or when you need to free memory.
- *
- * @example
- * ```typescript
- * import { clearRDSCache, getRDSCacheStats } from 'aws-instance-info'
- *
- * console.log(getRDSCacheStats()) // { instances: 10, families: 3, infoLoaded: true }
- *
- * clearRDSCache()
- *
- * console.log(getRDSCacheStats()) // { instances: 0, families: 0, infoLoaded: false }
- * ```
- */
-export function clearRDSCache(): void {
-  instanceCache.clear()
-  familyCache.clear()
-  infoCache = null
-}
-
-/**
- * Get RDS cache statistics.
- * Useful for debugging or monitoring memory usage.
- *
- * @returns Object with cache statistics
- *
- * @example
- * ```typescript
- * import { getRDSCacheStats, getRDSInstanceInfo } from 'aws-instance-info'
- *
- * getRDSInstanceInfo('db.m5.large')
- * getRDSInstanceInfo('db.m5.xlarge')
- *
- * const stats = getRDSCacheStats()
- * console.log(stats)
- * // { instances: 2, families: 0, infoLoaded: true }
- * ```
- */
-export function getRDSCacheStats(): {
-  instances: number
-  families: number
-  infoLoaded: boolean
-} {
-  return {
-    instances: instanceCache.size,
-    families: familyCache.size,
-    infoLoaded: infoCache !== null,
-  }
 }

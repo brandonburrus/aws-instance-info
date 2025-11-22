@@ -30,6 +30,10 @@
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
+    "./async": {
+      "import": "./dist/index.async.js",
+      "types": "./dist/index.async.d.ts"
+    },
     "./data/ec2/*": "./data/ec2/*",
     "./data/rds/*": "./data/rds/*",
     "./data/elasticache/*": "./data/elasticache/*"

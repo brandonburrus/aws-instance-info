@@ -33,6 +33,17 @@ console.log(m5Large.vCPUs);      // 2
 console.log(m5Large.category);   // 'general_purpose'
 ```
 
+NOTE: By default, the API loads data from disk synchronously. If you prefer async, you can use the async API from `aws-instance-info/async`.
+
+```typescript
+import { getEC2InstanceInfo } from 'aws-instance-info/async';
+
+const m5Large = await getEC2InstanceInfo('m5.large');
+console.log(m5Large.memoryGiB);  // 8
+console.log(m5Large.vCPUs);      // 2
+console.log(m5Large.category);   // 'general_purpose'
+```
+
 Get details for an entire EC2 instance family:
 
 ```typescript

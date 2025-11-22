@@ -1,9 +1,14 @@
 import { readFileSync } from 'node:fs'
-import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
-import { LRUCache } from 'lru-cache'
+import { join } from 'node:path'
 
-import { EC2_FAMILY_CACHE_SIZE, EC2_INSTANCE_CACHE_SIZE } from './constants.js'
+import {
+  EC2_DATA_DIR,
+  clearEC2Cache,
+  familyCache,
+  getEC2CacheStats,
+  infoCacheHolder,
+  instanceCache,
+} from './ec2.cache.js'
 import type {
   EC2Category,
   EC2FamilyData,
@@ -13,23 +18,12 @@ import type {
   EC2InstanceType,
 } from './types.js'
 
-/* File Paths */
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const DATA_DIR = join(__dirname, '..', 'data', 'ec2')
-
-/* Internal Caches */
-const instanceCache = new LRUCache<string, EC2InstanceDetails>({
-  max: EC2_INSTANCE_CACHE_SIZE,
-})
-const familyCache = new LRUCache<string, EC2FamilyData>({
-  max: EC2_FAMILY_CACHE_SIZE,
-})
-let infoCache: EC2Info | null = null
+/* Re-export cache utilities */
+export { clearEC2Cache, getEC2CacheStats }
 
 /* Internal helper function to load and parse JSON files */
 function loadJson<T>(relativePath: string): T {
-  const fullPath = join(DATA_DIR, relativePath)
+  const fullPath = join(EC2_DATA_DIR, relativePath)
   const content = readFileSync(fullPath, 'utf-8')
   return JSON.parse(content) as T
 }
@@ -51,12 +45,12 @@ function loadJson<T>(relativePath: string): T {
  * ```
  */
 export function getEC2Info(): EC2Info {
-  if (infoCache) {
-    return infoCache
+  if (infoCacheHolder.value) {
+    return infoCacheHolder.value
   }
 
-  infoCache = loadJson<EC2Info>('info.json')
-  return infoCache
+  infoCacheHolder.value = loadJson<EC2Info>('info.json')
+  return infoCacheHolder.value
 }
 
 /**
@@ -324,55 +318,4 @@ export function getEC2Families(
   })
 
   return new Map(results)
-}
-
-/**
- * Clear all EC2 cached data.
- * Useful for testing or when you need to free memory.
- *
- * @example
- * ```typescript
- * import { clearEC2Cache, getEC2CacheStats } from 'aws-instance-info'
- *
- * console.log(getEC2CacheStats()) // { instances: 10, families: 3, infoLoaded: true }
- *
- * clearEC2Cache()
- *
- * console.log(getEC2CacheStats()) // { instances: 0, families: 0, infoLoaded: false }
- * ```
- */
-export function clearEC2Cache(): void {
-  instanceCache.clear()
-  familyCache.clear()
-  infoCache = null
-}
-
-/**
- * Get EC2 cache statistics.
- * Useful for debugging or monitoring memory usage.
- *
- * @returns Object with cache statistics
- *
- * @example
- * ```typescript
- * import { getEC2CacheStats, getEC2InstanceInfo } from 'aws-instance-info'
- *
- * getEC2InstanceInfo('m5.large')
- * getEC2InstanceInfo('m5.xlarge')
- *
- * const stats = getEC2CacheStats()
- * console.log(stats)
- * // { instances: 2, families: 0, infoLoaded: true }
- * ```
- */
-export function getEC2CacheStats(): {
-  instances: number
-  families: number
-  infoLoaded: boolean
-} {
-  return {
-    instances: instanceCache.size,
-    families: familyCache.size,
-    infoLoaded: infoCache !== null,
-  }
 }

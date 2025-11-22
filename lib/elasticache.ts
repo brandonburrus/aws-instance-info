@@ -1,12 +1,14 @@
 import { readFileSync } from 'node:fs'
-import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
-import { LRUCache } from 'lru-cache'
+import { join } from 'node:path'
 
 import {
-  ELASTICACHE_FAMILY_CACHE_SIZE,
-  ELASTICACHE_NODE_CACHE_SIZE,
-} from './constants.js'
+  ELASTICACHE_DATA_DIR,
+  clearElastiCacheCache,
+  familyCache,
+  getElastiCacheCacheStats,
+  infoCacheHolder,
+  nodeCache,
+} from './elasticache.cache.js'
 import type {
   ElastiCacheCategory,
   ElastiCacheFamily,
@@ -16,23 +18,12 @@ import type {
   ElastiCacheNodeType,
 } from './types.js'
 
-/* File Paths */
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const DATA_DIR = join(__dirname, '..', 'data', 'elasticache')
-
-/* Internal Caches */
-const nodeCache = new LRUCache<string, ElastiCacheNodeDetails>({
-  max: ELASTICACHE_NODE_CACHE_SIZE,
-})
-const familyCache = new LRUCache<string, ElastiCacheFamilyData>({
-  max: ELASTICACHE_FAMILY_CACHE_SIZE,
-})
-let infoCache: ElastiCacheInfo | null = null
+/* Re-export cache utilities */
+export { clearElastiCacheCache, getElastiCacheCacheStats }
 
 /* Internal helper function to load and parse JSON files */
 function loadJson<T>(relativePath: string): T {
-  const fullPath = join(DATA_DIR, relativePath)
+  const fullPath = join(ELASTICACHE_DATA_DIR, relativePath)
   const content = readFileSync(fullPath, 'utf-8')
   return JSON.parse(content) as T
 }
@@ -54,12 +45,12 @@ function loadJson<T>(relativePath: string): T {
  * ```
  */
 export function getElastiCacheInfo(): ElastiCacheInfo {
-  if (infoCache) {
-    return infoCache
+  if (infoCacheHolder.value) {
+    return infoCacheHolder.value
   }
 
-  infoCache = loadJson<ElastiCacheInfo>('info.json')
-  return infoCache
+  infoCacheHolder.value = loadJson<ElastiCacheInfo>('info.json')
+  return infoCacheHolder.value
 }
 
 /**
@@ -327,55 +318,4 @@ export function getElastiCacheFamilies(
   })
 
   return new Map(results)
-}
-
-/**
- * Clear all Elasticache cached data.
- * Useful for testing or when you need to free memory.
- *
- * @example
- * ```typescript
- * import { clearElastiCacheCache, getElastiCacheCacheStats } from 'aws-instance-info'
- *
- * console.log(getElastiCacheCacheStats()) // { nodes: 10, families: 3, infoLoaded: true }
- *
- * clearElastiCacheCache()
- *
- * console.log(getElastiCacheCacheStats()) // { nodes: 0, families: 0, infoLoaded: false }
- * ```
- */
-export function clearElastiCacheCache(): void {
-  nodeCache.clear()
-  familyCache.clear()
-  infoCache = null
-}
-
-/**
- * Get Elasticache cache statistics.
- * Useful for debugging or monitoring memory usage.
- *
- * @returns Object with cache statistics
- *
- * @example
- * ```typescript
- * import { getElastiCacheCacheStats, getElastiCacheNodeInfo } from 'aws-instance-info'
- *
- * getElastiCacheNodeInfo('cache.m5.large')
- * getElastiCacheNodeInfo('cache.m5.xlarge')
- *
- * const stats = getElastiCacheCacheStats()
- * console.log(stats)
- * // { nodes: 2, families: 0, infoLoaded: true }
- * ```
- */
-export function getElastiCacheCacheStats(): {
-  nodes: number
-  families: number
-  infoLoaded: boolean
-} {
-  return {
-    nodes: nodeCache.size,
-    families: familyCache.size,
-    infoLoaded: infoCache !== null,
-  }
 }

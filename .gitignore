@@ -136,7 +136,7 @@ dist
 .pnp.*
 
 # generated files
-data/*
+data/
 lib/types.ts
 docs
 
