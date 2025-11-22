@@ -1,7 +1,7 @@
 [project]
-name = "ec2-details-scripts"
+name = "aws-instance-info-scripts"
 version = "0.1.0"
-description = "Automation scripts for scrapping the AWS docs for EC2 details."
+description = "Automation scripts for scrapping the AWS docs for EC2, RDS, and ElastiCache details."
 requires-python = ">=3.13"
 dependencies = [
     "beautifulsoup4>=4.14.2",

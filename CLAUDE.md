@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**ec2-details** is an ESM TypeScript library providing meta-information about AWS EC2 instances, RDS instance classes, and Elasticache node types (specs, networking, EBS, security, instance store). Uses lazy-loading with LRU caching.
+**aws-instance-info** is an ESM TypeScript library providing meta-information about AWS EC2 instances, RDS instance classes, and Elasticache node types (specs, networking, EBS, security, instance store). Uses lazy-loading with LRU caching.
 
 ## Architecture
 

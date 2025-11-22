@@ -1,6 +1,6 @@
 {
-  "name": "ec2-details",
-  "description": "Meta-information on AWS EC2 instances such as size, memory, and more",
+  "name": "aws-instance-info",
+  "description": "Retrieve meta-info for AWS EC2, RDS, and ElastiCache such as size, memory, and more",
   "version": "0.1.0",
   "author": "Brandon Burrus <brandon@burrus.io>",
   "license": "MIT",
@@ -13,13 +13,13 @@
     "information",
     "meta-information"
   ],
-  "homepage": "https://github.com/brandonburrus/ec2-details",
+  "homepage": "https://github.com/brandonburrus/aws-instance-info",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/brandonburrus/ec2-details.git"
+    "url": "git+https://github.com/brandonburrus/aws-instance-info.git"
   },
   "bugs": {
-    "url": "https://github.com/brandonburrus/ec2-details/issues"
+    "url": "https://github.com/brandonburrus/aws-instance-info/issues"
   },
   "files": ["dist", "data", "README.md", "LICENSE"],
   "type": "module",
