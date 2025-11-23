@@ -137,7 +137,6 @@ dist
 
 # generated files
 data/
-lib/types.ts
 docs
 
 # python
