@@ -12,11 +12,13 @@ npm install aws-instance-info
 
 ## Features
 
-- Detailed specifications for EC2, RDS, and ElastiCache instances
-- Memory, vCPUs, networking, storage, and security information
-- Lazy-loading with LRU caching for performance
-- TypeScript support with full type definitions
-- ESM-only
+- Get info for both Instances and Instance Families
+- Supports EC2, RDS, and ElastiCache
+- Full TypeScript support with type definitions built-in
+
+## Documentation
+
+Full API documentation can be found at [https://awsinstanceinfo.brandonburrus.com/](awsinstanceinfo.brandonburrus.com).
 
 ## Examples
 

@@ -14,7 +14,8 @@
       ".husky",
       "docs",
       "data",
-      "scripts/.venv"
+      "scripts/.venv",
+      ".netlify"
     ]
   },
   "formatter": {

@@ -13,13 +13,16 @@
     "information",
     "meta-information"
   ],
-  "homepage": "https://github.com/brandonburrus/aws-instance-info",
+  "homepage": "https://awsinstanceinfo.brandonburrus.com",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/brandonburrus/aws-instance-info.git"
   },
   "bugs": {
     "url": "https://github.com/brandonburrus/aws-instance-info/issues"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   },
   "files": ["dist", "data", "README.md", "LICENSE"],
   "type": "module",
