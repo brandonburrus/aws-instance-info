@@ -18,7 +18,7 @@ npm install aws-instance-info
 
 ## Documentation
 
-Full API documentation can be found at [https://awsinstanceinfo.brandonburrus.com/](awsinstanceinfo.brandonburrus.com).
+Full API documentation can be found at [awsinstanceinfo.brandonburrus.com](https://awsinstanceinfo.brandonburrus.com).
 
 ## Examples
 
