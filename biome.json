@@ -7,7 +7,15 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": ["node_modules", "dist", "coverage", ".husky"]
+    "ignore": [
+      "node_modules",
+      "dist",
+      "coverage",
+      ".husky",
+      "docs",
+      "data",
+      "scripts/.venv"
+    ]
   },
   "formatter": {
     "enabled": true,
