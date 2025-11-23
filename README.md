@@ -1,10 +1,6 @@
-# aws-instance-info
-
 [![Tests Passing](https://github.com/brandonburrus/aws-instance-info/actions/workflows/nightly-tests.yml/badge.svg?branch=main)](https://github.com/brandonburrus/aws-instance-info/actions/workflows/nightly-tests.yml)
 
 Get detailed specifications for AWS EC2 instances, RDS instance classes, and ElastiCache node types.
-
-This data is scrapped directly from the specifications published by AWS on their official documentation. All data is saved as local json files which are part of this module, however they are only loaded into memory on demand once, and then cached in an LRU cache.
 
 ## Installation
 
@@ -83,3 +79,13 @@ console.log(cacheM5Large.memoryGiB);   // 6.38
 console.log(cacheM5Large.vCPUs);       // 2
 console.log(cacheM5Large.category);    // 'general_purpose'
 ```
+
+## FAQ
+
+Q: Where does the data come from?
+The data is sourced from the official AWS documentation and is updated regularly to reflect any changes made by AWS.
+This process is completely automated via the python scripts as part of this project.
+
+Q: How is the data stored?
+The data is stored in JSON files within the package, allowing for quick and efficient access. These loaded and cached on-demand in memory.
+
