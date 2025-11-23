@@ -146,3 +146,6 @@ __pycache__/
 *.pyo
 *.pyd
 
+
+# Local Netlify folder
+.netlify
