@@ -20,6 +20,7 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/families/C7gn.json",
   "ec2/families/C7i-flex.json",
   "ec2/families/C7i.json",
+  "ec2/families/C8a.json",
   "ec2/families/C8g.json",
   "ec2/families/C8gd.json",
   "ec2/families/C8gn.json",
@@ -151,6 +152,7 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/families/X2idn.json",
   "ec2/families/X2iedn.json",
   "ec2/families/X2iezn.json",
+  "ec2/families/X8aedz.json",
   "ec2/families/X8g.json",
   "ec2/families/z1d.json",
   "ec2/info.json",
@@ -319,6 +321,18 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/instances/c7i.metal-24xl.json",
   "ec2/instances/c7i.metal-48xl.json",
   "ec2/instances/c7i.xlarge.json",
+  "ec2/instances/c8a.12xlarge.json",
+  "ec2/instances/c8a.16xlarge.json",
+  "ec2/instances/c8a.24xlarge.json",
+  "ec2/instances/c8a.2xlarge.json",
+  "ec2/instances/c8a.48xlarge.json",
+  "ec2/instances/c8a.4xlarge.json",
+  "ec2/instances/c8a.8xlarge.json",
+  "ec2/instances/c8a.large.json",
+  "ec2/instances/c8a.medium.json",
+  "ec2/instances/c8a.metal-24xl.json",
+  "ec2/instances/c8a.metal-48xl.json",
+  "ec2/instances/c8a.xlarge.json",
   "ec2/instances/c8g.12xlarge.json",
   "ec2/instances/c8g.16xlarge.json",
   "ec2/instances/c8g.24xlarge.json",
@@ -1150,6 +1164,14 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/instances/x2iezn.6xlarge.json",
   "ec2/instances/x2iezn.8xlarge.json",
   "ec2/instances/x2iezn.metal.json",
+  "ec2/instances/x8aedz.12xlarge.json",
+  "ec2/instances/x8aedz.24xlarge.json",
+  "ec2/instances/x8aedz.3xlarge.json",
+  "ec2/instances/x8aedz.6xlarge.json",
+  "ec2/instances/x8aedz.large.json",
+  "ec2/instances/x8aedz.metal-12xl.json",
+  "ec2/instances/x8aedz.metal-24xl.json",
+  "ec2/instances/x8aedz.xlarge.json",
   "ec2/instances/x8g.12xlarge.json",
   "ec2/instances/x8g.16xlarge.json",
   "ec2/instances/x8g.24xlarge.json",
@@ -1201,6 +1223,7 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "C7gn",
     "C7i",
     "C7i-flex",
+    "C8a",
     "C8g",
     "C8gd",
     "C8gn",
@@ -1332,6 +1355,7 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "X2idn",
     "X2iedn",
     "X2iezn",
+    "X8aedz",
     "X8g",
     "z1d",
   ],
@@ -1501,6 +1525,18 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "c7i.metal-24xl",
     "c7i.metal-48xl",
     "c7i.xlarge",
+    "c8a.12xlarge",
+    "c8a.16xlarge",
+    "c8a.24xlarge",
+    "c8a.2xlarge",
+    "c8a.48xlarge",
+    "c8a.4xlarge",
+    "c8a.8xlarge",
+    "c8a.large",
+    "c8a.medium",
+    "c8a.metal-24xl",
+    "c8a.metal-48xl",
+    "c8a.xlarge",
     "c8g.12xlarge",
     "c8g.16xlarge",
     "c8g.24xlarge",
@@ -2332,6 +2368,14 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "x2iezn.6xlarge",
     "x2iezn.8xlarge",
     "x2iezn.metal",
+    "x8aedz.12xlarge",
+    "x8aedz.24xlarge",
+    "x8aedz.3xlarge",
+    "x8aedz.6xlarge",
+    "x8aedz.large",
+    "x8aedz.metal-12xl",
+    "x8aedz.metal-24xl",
+    "x8aedz.xlarge",
     "x8g.12xlarge",
     "x8g.16xlarge",
     "x8g.24xlarge",
@@ -2852,6 +2896,37 @@ exports[`EC2 Data Files > should match snapshots for all family files > ec2-fami
     "Linux",
   ],
   "processorArchitecture": "Intel (x86_64)",
+  "spot": true,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all family files > ec2-family-C8a 1`] = `
+{
+  "category": "compute_optimized",
+  "dedicatedHosts": true,
+  "family": "C8a",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceTypes": [
+    "c8a.12xlarge",
+    "c8a.16xlarge",
+    "c8a.24xlarge",
+    "c8a.2xlarge",
+    "c8a.48xlarge",
+    "c8a.4xlarge",
+    "c8a.8xlarge",
+    "c8a.large",
+    "c8a.medium",
+    "c8a.metal-24xl",
+    "c8a.metal-48xl",
+    "c8a.xlarge",
+  ],
+  "metalAvailable": true,
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processorArchitecture": "AMD (x86_64)",
   "spot": true,
 }
 `;
@@ -4729,7 +4804,7 @@ exports[`EC2 Data Files > should match snapshots for all family files > ec2-fami
 exports[`EC2 Data Files > should match snapshots for all family files > ec2-family-P6-B300 1`] = `
 {
   "category": "accelerated_computing",
-  "dedicatedHosts": true,
+  "dedicatedHosts": false,
   "family": "P6-B300",
   "hibernation": false,
   "hypervisor": "Nitro v6",
@@ -6119,6 +6194,33 @@ exports[`EC2 Data Files > should match snapshots for all family files > ec2-fami
     "Linux",
   ],
   "processorArchitecture": "Intel (x86_64)",
+  "spot": true,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all family files > ec2-family-X8aedz 1`] = `
+{
+  "category": "memory_optimized",
+  "dedicatedHosts": true,
+  "family": "X8aedz",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceTypes": [
+    "x8aedz.12xlarge",
+    "x8aedz.24xlarge",
+    "x8aedz.3xlarge",
+    "x8aedz.6xlarge",
+    "x8aedz.large",
+    "x8aedz.metal-12xl",
+    "x8aedz.metal-24xl",
+    "x8aedz.xlarge",
+  ],
+  "metalAvailable": true,
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processorArchitecture": "AMD (x86_64)",
   "spot": true,
 }
 `;
@@ -17072,6 +17174,777 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   },
   "spot": true,
   "threadsPerCore": 2,
+  "vCPUs": 4,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8a.2xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 8,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 2500,
+      "burst": 10000,
+    },
+    "iops": {
+      "baseline": 12000,
+      "burst": 40000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 312.5,
+      "burst": 1250,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8a",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8a.2xlarge",
+  "memoryGiB": 16,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 3.75,
+      "burst": 15,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 40,
+    "ipv6": true,
+    "maxInterfaces": 4,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R45",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 8,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8a.4xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 16,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 5000,
+      "burst": 10000,
+    },
+    "iops": {
+      "baseline": 20000,
+      "burst": 40000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 625,
+      "burst": 1250,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8a",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8a.4xlarge",
+  "memoryGiB": 32,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 7.5,
+      "burst": 15,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 40,
+    "ipv6": true,
+    "maxInterfaces": 8,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R45",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 16,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8a.8xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 32,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 10000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 40000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 1250,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8a",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8a.8xlarge",
+  "memoryGiB": 64,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "15 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 40,
+    "ipv6": true,
+    "maxInterfaces": 10,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R45",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 32,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8a.12xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 48,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 15000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 60000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 1875,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8a",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8a.12xlarge",
+  "memoryGiB": 96,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "22.5 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 12,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R45",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 48,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8a.16xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 64,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 20000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 80000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 2500,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 48,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8a",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8a.16xlarge",
+  "memoryGiB": 128,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "30 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 16,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R45",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 64,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8a.24xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 96,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 30000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 120000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 3750,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 64,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8a",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8a.24xlarge",
+  "memoryGiB": 192,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "40 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 16,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R45",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 96,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8a.48xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 192,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 60000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 240000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 7500,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 128,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8a",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8a.48xlarge",
+  "memoryGiB": 384,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "75 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 24,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R45",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 192,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8a.large 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 2,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 650,
+      "burst": 10000,
+    },
+    "iops": {
+      "baseline": 3600,
+      "burst": 40000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 81.25,
+      "burst": 1250,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8a",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8a.large",
+  "memoryGiB": 4,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 0.937,
+      "burst": 12.5,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 20,
+    "ipv6": true,
+    "maxInterfaces": 3,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R45",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 2,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8a.medium 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 1,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 325,
+      "burst": 10000,
+    },
+    "iops": {
+      "baseline": 2500,
+      "burst": 40000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 40.62,
+      "burst": 1250,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8a",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8a.medium",
+  "memoryGiB": 2,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 0.52,
+      "burst": 12.5,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 4,
+    "ipv6": true,
+    "maxInterfaces": 2,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R45",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": false,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 1,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8a.metal-24xl 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 96,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 30000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 120000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 3750,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 64,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8a",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8a.metal-24xl",
+  "memoryGiB": 192,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "40 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 16,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R45",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": false,
+    "nitroTPM": false,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 96,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8a.metal-48xl 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 192,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 60000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 240000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 7500,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 79,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8a",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8a.metal-48xl",
+  "memoryGiB": 384,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "75 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 24,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R45",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": false,
+    "nitroTPM": false,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 192,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8a.xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 4,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 1250,
+      "burst": 10000,
+    },
+    "iops": {
+      "baseline": 6000,
+      "burst": 40000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 156.25,
+      "burst": 1250,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8a",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8a.xlarge",
+  "memoryGiB": 8,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 1.875,
+      "burst": 12.5,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 20,
+    "ipv6": true,
+    "maxInterfaces": 4,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R45",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
   "vCPUs": 4,
 }
 `;
@@ -49564,7 +50437,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "accelerators": "8 x NVIDIA B300 GPU",
   "category": "accelerated_computing",
   "cpuCores": 96,
-  "dedicatedHosts": true,
+  "dedicatedHosts": false,
   "ebs": {
     "bandwidthMbps": {
       "baseline": 100000,
@@ -72727,6 +73600,575 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "spot": true,
   "threadsPerCore": 2,
   "vCPUs": 48,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8aedz.3xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 12,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 7500,
+      "burst": 15000,
+    },
+    "iops": {
+      "baseline": 30000,
+      "burst": 60000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 937.5,
+      "burst": 1875,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8aedz",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": {
+    "needsInit": null,
+    "readIOPS": "268,333",
+    "storeType": "NVMe SSD",
+    "trimSupport": true,
+    "volumes": "1 x 950 GB",
+    "writeIOPS": "134,167",
+  },
+  "instanceType": "x8aedz.3xlarge",
+  "memoryGiB": 384,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 9.375,
+      "burst": 18.75,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 40,
+    "ipv6": true,
+    "maxInterfaces": 8,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R05",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": true,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 12,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8aedz.6xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 24,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 15000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 60000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 1875,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8aedz",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": {
+    "needsInit": null,
+    "readIOPS": "536,666",
+    "storeType": "NVMe SSD",
+    "trimSupport": true,
+    "volumes": "1 x 1900 GB",
+    "writeIOPS": "268,334",
+  },
+  "instanceType": "x8aedz.6xlarge",
+  "memoryGiB": 768,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "18.75 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 40,
+    "ipv6": true,
+    "maxInterfaces": 8,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R05",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": true,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 24,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8aedz.12xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 48,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 30000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 120000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 3750,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 64,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8aedz",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": {
+    "needsInit": null,
+    "readIOPS": "1,073,332",
+    "storeType": "NVMe SSD",
+    "trimSupport": true,
+    "volumes": "1 x 3800 GB",
+    "writeIOPS": "536,668",
+  },
+  "instanceType": "x8aedz.12xlarge",
+  "memoryGiB": 1536,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "37.5 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 16,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R05",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": true,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 48,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8aedz.24xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 96,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 60000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 240000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 7500,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 128,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8aedz",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": {
+    "needsInit": null,
+    "readIOPS": "2,146,664",
+    "storeType": "NVMe SSD",
+    "trimSupport": true,
+    "volumes": "2 x 3800 GB",
+    "writeIOPS": "1,073,336",
+  },
+  "instanceType": "x8aedz.24xlarge",
+  "memoryGiB": 3072,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "75 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 16,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R05",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": true,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 96,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8aedz.large 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 2,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 1250,
+      "burst": 15000,
+    },
+    "iops": {
+      "baseline": 5000,
+      "burst": 60000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 156.25,
+      "burst": 1875,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8aedz",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": {
+    "needsInit": null,
+    "readIOPS": "44,722",
+    "storeType": "NVMe SSD",
+    "trimSupport": true,
+    "volumes": "1 x 158 GB",
+    "writeIOPS": "22,361",
+  },
+  "instanceType": "x8aedz.large",
+  "memoryGiB": 64,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 1.562,
+      "burst": 18.75,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 20,
+    "ipv6": true,
+    "maxInterfaces": 4,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R05",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": true,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 2,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8aedz.metal-12xl 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 48,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 30000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 120000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 3750,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 64,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8aedz",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": {
+    "needsInit": null,
+    "readIOPS": "1,073,332",
+    "storeType": "NVMe SSD",
+    "trimSupport": true,
+    "volumes": "1 x 3800 GB",
+    "writeIOPS": "536,668",
+  },
+  "instanceType": "x8aedz.metal-12xl",
+  "memoryGiB": 1536,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "37.5 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 16,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R05",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": true,
+    "nitroEnclaves": false,
+    "nitroTPM": false,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 48,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8aedz.metal-24xl 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 96,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 60000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 240000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 7500,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 79,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8aedz",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": {
+    "needsInit": null,
+    "readIOPS": "2,146,664",
+    "storeType": "NVMe SSD",
+    "trimSupport": true,
+    "volumes": "2 x 3800 GB",
+    "writeIOPS": "1,073,336",
+  },
+  "instanceType": "x8aedz.metal-24xl",
+  "memoryGiB": 3072,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "75 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 16,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R05",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": true,
+    "nitroEnclaves": false,
+    "nitroTPM": false,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 96,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8aedz.xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 4,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 2500,
+      "burst": 15000,
+    },
+    "iops": {
+      "baseline": 10000,
+      "burst": 60000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 312.5,
+      "burst": 1875,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8aedz",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": {
+    "needsInit": null,
+    "readIOPS": "89,444",
+    "storeType": "NVMe SSD",
+    "trimSupport": true,
+    "volumes": "1 x 316 GB",
+    "writeIOPS": "44,722",
+  },
+  "instanceType": "x8aedz.xlarge",
+  "memoryGiB": 128,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 3.125,
+      "burst": 18.75,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 20,
+    "ipv6": true,
+    "maxInterfaces": 4,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R05",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": true,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 4,
 }
 `;
 
