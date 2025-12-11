@@ -22,6 +22,7 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/families/C7i.json",
   "ec2/families/C8a.json",
   "ec2/families/C8g.json",
+  "ec2/families/C8gb.json",
   "ec2/families/C8gd.json",
   "ec2/families/C8gn.json",
   "ec2/families/C8i-flex.json",
@@ -345,6 +346,16 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/instances/c8g.metal-24xl.json",
   "ec2/instances/c8g.metal-48xl.json",
   "ec2/instances/c8g.xlarge.json",
+  "ec2/instances/c8gb.12xlarge.json",
+  "ec2/instances/c8gb.16xlarge.json",
+  "ec2/instances/c8gb.24xlarge.json",
+  "ec2/instances/c8gb.2xlarge.json",
+  "ec2/instances/c8gb.4xlarge.json",
+  "ec2/instances/c8gb.8xlarge.json",
+  "ec2/instances/c8gb.large.json",
+  "ec2/instances/c8gb.medium.json",
+  "ec2/instances/c8gb.metal-24xl.json",
+  "ec2/instances/c8gb.xlarge.json",
   "ec2/instances/c8gd.12xlarge.json",
   "ec2/instances/c8gd.16xlarge.json",
   "ec2/instances/c8gd.24xlarge.json",
@@ -1225,6 +1236,7 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "C7i-flex",
     "C8a",
     "C8g",
+    "C8gb",
     "C8gd",
     "C8gn",
     "C8i",
@@ -1549,6 +1561,16 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "c8g.metal-24xl",
     "c8g.metal-48xl",
     "c8g.xlarge",
+    "c8gb.12xlarge",
+    "c8gb.16xlarge",
+    "c8gb.24xlarge",
+    "c8gb.2xlarge",
+    "c8gb.4xlarge",
+    "c8gb.8xlarge",
+    "c8gb.large",
+    "c8gb.medium",
+    "c8gb.metal-24xl",
+    "c8gb.xlarge",
     "c8gd.12xlarge",
     "c8gd.16xlarge",
     "c8gd.24xlarge",
@@ -2951,6 +2973,34 @@ exports[`EC2 Data Files > should match snapshots for all family files > ec2-fami
     "c8g.metal-24xl",
     "c8g.metal-48xl",
     "c8g.xlarge",
+  ],
+  "metalAvailable": true,
+  "operatingSystems": [
+    "Linux",
+  ],
+  "processorArchitecture": "AWS Graviton (arm64)",
+  "spot": true,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all family files > ec2-family-C8gb 1`] = `
+{
+  "category": "compute_optimized",
+  "dedicatedHosts": true,
+  "family": "C8gb",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceTypes": [
+    "c8gb.12xlarge",
+    "c8gb.16xlarge",
+    "c8gb.24xlarge",
+    "c8gb.2xlarge",
+    "c8gb.4xlarge",
+    "c8gb.8xlarge",
+    "c8gb.large",
+    "c8gb.medium",
+    "c8gb.metal-24xl",
+    "c8gb.xlarge",
   ],
   "metalAvailable": true,
   "operatingSystems": [
@@ -18680,6 +18730,638 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     "bandwidthGbps": {
       "baseline": 1.875,
       "burst": 12.5,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 15,
+    "ipv6": true,
+    "maxInterfaces": 4,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Linux",
+  ],
+  "processor": "AWS Graviton4 Processor",
+  "processorArchitecture": "AWS Graviton (arm64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 4,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8gb.2xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 8,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 12500,
+      "burst": 25000,
+    },
+    "iops": {
+      "baseline": 60000,
+      "burst": 120000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 1562.5,
+      "burst": 3125,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8gb",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8gb.2xlarge",
+  "memoryGiB": 16,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 16.666,
+      "burst": 33.333,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 15,
+    "ipv6": true,
+    "maxInterfaces": 4,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Linux",
+  ],
+  "processor": "AWS Graviton4 Processor",
+  "processorArchitecture": "AWS Graviton (arm64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 8,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8gb.4xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 16,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 25000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 120000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 3125,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8gb",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8gb.4xlarge",
+  "memoryGiB": 32,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "33.33 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 30,
+    "ipv6": true,
+    "maxInterfaces": 8,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Linux",
+  ],
+  "processor": "AWS Graviton4 Processor",
+  "processorArchitecture": "AWS Graviton (arm64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 16,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8gb.8xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 32,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 50000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 240000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 6250,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8gb",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8gb.8xlarge",
+  "memoryGiB": 64,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "66.66 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 30,
+    "ipv6": true,
+    "maxInterfaces": 10,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Linux",
+  ],
+  "processor": "AWS Graviton4 Processor",
+  "processorArchitecture": "AWS Graviton (arm64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 32,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8gb.12xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 48,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 75000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 360000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 9375,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8gb",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8gb.12xlarge",
+  "memoryGiB": 96,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "100 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 30,
+    "ipv6": true,
+    "maxInterfaces": 12,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Linux",
+  ],
+  "processor": "AWS Graviton4 Processor",
+  "processorArchitecture": "AWS Graviton (arm64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 48,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8gb.16xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 64,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 100000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 480000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 12500,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 48,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8gb",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8gb.16xlarge",
+  "memoryGiB": 128,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "133.33 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 50,
+    "ipv6": true,
+    "maxInterfaces": 16,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Linux",
+  ],
+  "processor": "AWS Graviton4 Processor",
+  "processorArchitecture": "AWS Graviton (arm64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 64,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8gb.24xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 96,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 150000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 720000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 18750,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 64,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8gb",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8gb.24xlarge",
+  "memoryGiB": 192,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "200 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 50,
+    "ipv6": true,
+    "maxInterfaces": 24,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Linux",
+  ],
+  "processor": "AWS Graviton4 Processor",
+  "processorArchitecture": "AWS Graviton (arm64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 96,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8gb.large 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 2,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 3125,
+      "burst": 25000,
+    },
+    "iops": {
+      "baseline": 15000,
+      "burst": 120000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 390.62,
+      "burst": 3125,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8gb",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8gb.large",
+  "memoryGiB": 4,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 4.166,
+      "burst": 20,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 10,
+    "ipv6": true,
+    "maxInterfaces": 3,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Linux",
+  ],
+  "processor": "AWS Graviton4 Processor",
+  "processorArchitecture": "AWS Graviton (arm64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 2,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8gb.medium 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 1,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 1562,
+      "burst": 25000,
+    },
+    "iops": {
+      "baseline": 7500,
+      "burst": 120000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 195.31,
+      "burst": 3125,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8gb",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8gb.medium",
+  "memoryGiB": 2,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 2.083,
+      "burst": 16.666,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 4,
+    "ipv6": true,
+    "maxInterfaces": 2,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Linux",
+  ],
+  "processor": "AWS Graviton4 Processor",
+  "processorArchitecture": "AWS Graviton (arm64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": false,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 1,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8gb.metal-24xl 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 96,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 150000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 720000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 18750,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 39,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8gb",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8gb.metal-24xl",
+  "memoryGiB": 192,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "200 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 50,
+    "ipv6": true,
+    "maxInterfaces": 24,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Linux",
+  ],
+  "processor": "AWS Graviton4 Processor",
+  "processorArchitecture": "AWS Graviton (arm64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": false,
+    "nitroTPM": false,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 96,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-c8gb.xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "compute_optimized",
+  "cpuCores": 4,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 6250,
+      "burst": 25000,
+    },
+    "iops": {
+      "baseline": 30000,
+      "burst": 120000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 781.25,
+      "burst": 3125,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "C8gb",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "c8gb.xlarge",
+  "memoryGiB": 8,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 8.333,
+      "burst": 26.666,
     },
     "efa": false,
     "ena": true,
