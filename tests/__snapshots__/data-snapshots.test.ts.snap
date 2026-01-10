@@ -52109,7 +52109,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     "bandwidthGbps": "100 Gigabit",
     "efa": true,
     "ena": true,
-    "enaExpress": false,
+    "enaExpress": true,
     "ipv4PerInterface": 30,
     "ipv6": true,
     "maxInterfaces": 4,
