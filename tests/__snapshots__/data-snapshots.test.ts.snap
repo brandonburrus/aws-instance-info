@@ -157,6 +157,7 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/families/X2iezn.json",
   "ec2/families/X8aedz.json",
   "ec2/families/X8g.json",
+  "ec2/families/X8i.json",
   "ec2/families/z1d.json",
   "ec2/info.json",
   "ec2/instances/c5.12xlarge.json",
@@ -1216,6 +1217,20 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/instances/x8g.metal-24xl.json",
   "ec2/instances/x8g.metal-48xl.json",
   "ec2/instances/x8g.xlarge.json",
+  "ec2/instances/x8i.12xlarge.json",
+  "ec2/instances/x8i.16xlarge.json",
+  "ec2/instances/x8i.24xlarge.json",
+  "ec2/instances/x8i.2xlarge.json",
+  "ec2/instances/x8i.32xlarge.json",
+  "ec2/instances/x8i.48xlarge.json",
+  "ec2/instances/x8i.4xlarge.json",
+  "ec2/instances/x8i.64xlarge.json",
+  "ec2/instances/x8i.8xlarge.json",
+  "ec2/instances/x8i.96xlarge.json",
+  "ec2/instances/x8i.large.json",
+  "ec2/instances/x8i.metal-48xl.json",
+  "ec2/instances/x8i.metal-96xl.json",
+  "ec2/instances/x8i.xlarge.json",
   "ec2/instances/z1d.12xlarge.json",
   "ec2/instances/z1d.2xlarge.json",
   "ec2/instances/z1d.3xlarge.json",
@@ -1392,6 +1407,7 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "X2iezn",
     "X8aedz",
     "X8g",
+    "X8i",
     "z1d",
   ],
   "instances": [
@@ -2452,6 +2468,20 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "x8g.metal-24xl",
     "x8g.metal-48xl",
     "x8g.xlarge",
+    "x8i.12xlarge",
+    "x8i.16xlarge",
+    "x8i.24xlarge",
+    "x8i.2xlarge",
+    "x8i.32xlarge",
+    "x8i.48xlarge",
+    "x8i.4xlarge",
+    "x8i.64xlarge",
+    "x8i.8xlarge",
+    "x8i.96xlarge",
+    "x8i.large",
+    "x8i.metal-48xl",
+    "x8i.metal-96xl",
+    "x8i.xlarge",
     "z1d.12xlarge",
     "z1d.2xlarge",
     "z1d.3xlarge",
@@ -6398,6 +6428,39 @@ exports[`EC2 Data Files > should match snapshots for all family files > ec2-fami
     "Linux",
   ],
   "processorArchitecture": "AWS Graviton (arm64)",
+  "spot": true,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all family files > ec2-family-X8i 1`] = `
+{
+  "category": "memory_optimized",
+  "dedicatedHosts": true,
+  "family": "X8i",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceTypes": [
+    "x8i.12xlarge",
+    "x8i.16xlarge",
+    "x8i.24xlarge",
+    "x8i.2xlarge",
+    "x8i.32xlarge",
+    "x8i.48xlarge",
+    "x8i.4xlarge",
+    "x8i.64xlarge",
+    "x8i.8xlarge",
+    "x8i.96xlarge",
+    "x8i.large",
+    "x8i.metal-48xl",
+    "x8i.metal-96xl",
+    "x8i.xlarge",
+  ],
+  "metalAvailable": true,
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processorArchitecture": "Intel (x86_64)",
   "spot": true,
 }
 `;
@@ -76908,6 +76971,900 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   },
   "spot": true,
   "threadsPerCore": 1,
+  "vCPUs": 4,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8i.2xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 4,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 2500,
+      "burst": 10000,
+    },
+    "iops": {
+      "baseline": 12000,
+      "burst": 40000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 312.5,
+      "burst": 1250,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8i",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "x8i.2xlarge",
+  "memoryGiB": 128,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 3.75,
+      "burst": 15,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 30,
+    "ipv6": true,
+    "maxInterfaces": 4,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Granite Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 8,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8i.4xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 8,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 5000,
+      "burst": 10000,
+    },
+    "iops": {
+      "baseline": 20000,
+      "burst": 40000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 625,
+      "burst": 1250,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8i",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "x8i.4xlarge",
+  "memoryGiB": 256,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 7.5,
+      "burst": 15,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 50,
+    "ipv6": true,
+    "maxInterfaces": 8,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Granite Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 16,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8i.8xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 16,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 10000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 40000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 1250,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8i",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "x8i.8xlarge",
+  "memoryGiB": 512,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "15 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 50,
+    "ipv6": true,
+    "maxInterfaces": 10,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Granite Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 32,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8i.12xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 24,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 15000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 60000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 1875,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8i",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "x8i.12xlarge",
+  "memoryGiB": 768,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "22.5 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 50,
+    "ipv6": true,
+    "maxInterfaces": 12,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Granite Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 48,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8i.16xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 32,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 20000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 80000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 2500,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 48,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8i",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "x8i.16xlarge",
+  "memoryGiB": 1024,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "30 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 16,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Granite Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 64,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8i.24xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 48,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 30000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 120000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 3750,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 64,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8i",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "x8i.24xlarge",
+  "memoryGiB": 1536,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "40 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 16,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Granite Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 96,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8i.32xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 64,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 40000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 160000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 5000,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 88,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8i",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "x8i.32xlarge",
+  "memoryGiB": 2048,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "50 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 24,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Granite Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 128,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8i.48xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 96,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 60000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 240000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 7500,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 128,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8i",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "x8i.48xlarge",
+  "memoryGiB": 3072,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "75 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 24,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Granite Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 192,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8i.64xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 128,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 70000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 320000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 8750,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 128,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8i",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "x8i.64xlarge",
+  "memoryGiB": 4096,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "80 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 24,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Granite Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 256,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8i.96xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 192,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 80000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 480000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 10000,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 128,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8i",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "x8i.96xlarge",
+  "memoryGiB": 6144,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "100 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 24,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Granite Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 384,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8i.large 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 1,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 650,
+      "burst": 10000,
+    },
+    "iops": {
+      "baseline": 3600,
+      "burst": 40000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 81.25,
+      "burst": 1250,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8i",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "x8i.large",
+  "memoryGiB": 32,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 0.937,
+      "burst": 12.5,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 20,
+    "ipv6": true,
+    "maxInterfaces": 3,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Granite Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": false,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 2,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8i.metal-48xl 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 96,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 60000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 240000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 7500,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 64,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8i",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "x8i.metal-48xl",
+  "memoryGiB": 3072,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "75 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 24,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Granite Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": false,
+    "nitroTPM": false,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 192,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8i.metal-96xl 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 192,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 80000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 480000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 10000,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 79,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8i",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "x8i.metal-96xl",
+  "memoryGiB": 6144,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "100 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 24,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Granite Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": false,
+    "nitroTPM": false,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 384,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-x8i.xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "memory_optimized",
+  "cpuCores": 2,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 1250,
+      "burst": 10000,
+    },
+    "iops": {
+      "baseline": 6000,
+      "burst": 40000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 156.25,
+      "burst": 1250,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "X8i",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "x8i.xlarge",
+  "memoryGiB": 64,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 1.875,
+      "burst": 12.5,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 30,
+    "ipv6": true,
+    "maxInterfaces": 4,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Granite Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
   "vCPUs": 4,
 }
 `;
