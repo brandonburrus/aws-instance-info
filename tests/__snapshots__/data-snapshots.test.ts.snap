@@ -41,6 +41,7 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/families/G6.json",
   "ec2/families/G6e.json",
   "ec2/families/G6f.json",
+  "ec2/families/G7e.json",
   "ec2/families/Gr6.json",
   "ec2/families/Gr6f.json",
   "ec2/families/H1.json",
@@ -471,6 +472,12 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/instances/g6f.4xlarge.json",
   "ec2/instances/g6f.large.json",
   "ec2/instances/g6f.xlarge.json",
+  "ec2/instances/g7e.12xlarge.json",
+  "ec2/instances/g7e.24xlarge.json",
+  "ec2/instances/g7e.2xlarge.json",
+  "ec2/instances/g7e.48xlarge.json",
+  "ec2/instances/g7e.4xlarge.json",
+  "ec2/instances/g7e.8xlarge.json",
   "ec2/instances/gr6.4xlarge.json",
   "ec2/instances/gr6.8xlarge.json",
   "ec2/instances/gr6f.4xlarge.json",
@@ -1291,6 +1298,7 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "G6",
     "G6e",
     "G6f",
+    "G7e",
     "Gr6",
     "Gr6f",
     "H1",
@@ -1722,6 +1730,12 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "g6f.4xlarge",
     "g6f.large",
     "g6f.xlarge",
+    "g7e.12xlarge",
+    "g7e.24xlarge",
+    "g7e.2xlarge",
+    "g7e.48xlarge",
+    "g7e.4xlarge",
+    "g7e.8xlarge",
     "gr6.4xlarge",
     "gr6.8xlarge",
     "gr6f.4xlarge",
@@ -3526,6 +3540,31 @@ exports[`EC2 Data Files > should match snapshots for all family files > ec2-fami
     "Linux",
   ],
   "processorArchitecture": "AMD (x86_64)",
+  "spot": true,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all family files > ec2-family-G7e 1`] = `
+{
+  "category": "accelerated_computing",
+  "dedicatedHosts": true,
+  "family": "G7e",
+  "hibernation": false,
+  "hypervisor": "Nitro v6",
+  "instanceTypes": [
+    "g7e.12xlarge",
+    "g7e.24xlarge",
+    "g7e.2xlarge",
+    "g7e.48xlarge",
+    "g7e.4xlarge",
+    "g7e.8xlarge",
+  ],
+  "metalAvailable": false,
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processorArchitecture": "Intel (x86_64)",
   "spot": true,
 }
 `;
@@ -27220,6 +27259,426 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "spot": true,
   "threadsPerCore": 2,
   "vCPUs": 4,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-g7e.2xlarge 1`] = `
+{
+  "acceleratorMemory": "96 GiB (1 x 96 GiB)",
+  "accelerators": "1 x NVIDIA RTX PRO Server 6000 GPU",
+  "category": "accelerated_computing",
+  "cpuCores": 4,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 2000,
+      "burst": 5000,
+    },
+    "iops": {
+      "baseline": 8000,
+      "burst": 20000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 250,
+      "burst": 625,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "G7e",
+  "hibernation": false,
+  "hypervisor": "Nitro v6",
+  "instanceStore": {
+    "needsInit": null,
+    "readIOPS": "275,000",
+    "storeType": "NVMe SSD",
+    "trimSupport": true,
+    "volumes": "1 x 1900 GB",
+    "writeIOPS": "137,500",
+  },
+  "instanceType": "g7e.2xlarge",
+  "memoryGiB": 64,
+  "metalAvailable": false,
+  "network": {
+    "bandwidthGbps": "50 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 4,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Emerald Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": true,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 8,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-g7e.4xlarge 1`] = `
+{
+  "acceleratorMemory": "96 GiB (1 x 96 GiB)",
+  "accelerators": "1 x NVIDIA RTX PRO Server 6000 GPU",
+  "category": "accelerated_computing",
+  "cpuCores": 8,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 8000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 32000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 1000,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "G7e",
+  "hibernation": false,
+  "hypervisor": "Nitro v6",
+  "instanceStore": {
+    "needsInit": null,
+    "readIOPS": "275,000",
+    "storeType": "NVMe SSD",
+    "trimSupport": true,
+    "volumes": "1 x 1900 GB",
+    "writeIOPS": "137,500",
+  },
+  "instanceType": "g7e.4xlarge",
+  "memoryGiB": 128,
+  "metalAvailable": false,
+  "network": {
+    "bandwidthGbps": "50 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 8,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Emerald Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": true,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 16,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-g7e.8xlarge 1`] = `
+{
+  "acceleratorMemory": "96 GiB (1 x 96 GiB)",
+  "accelerators": "1 x NVIDIA RTX PRO Server 6000 GPU",
+  "category": "accelerated_computing",
+  "cpuCores": 16,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 16000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 64000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 2000,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "G7e",
+  "hibernation": false,
+  "hypervisor": "Nitro v6",
+  "instanceStore": {
+    "needsInit": null,
+    "readIOPS": "275,000",
+    "storeType": "NVMe SSD",
+    "trimSupport": true,
+    "volumes": "1 x 1900 GB",
+    "writeIOPS": "137,500",
+  },
+  "instanceType": "g7e.8xlarge",
+  "memoryGiB": 256,
+  "metalAvailable": false,
+  "network": {
+    "bandwidthGbps": "100 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 8,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Emerald Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": true,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 32,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-g7e.12xlarge 1`] = `
+{
+  "acceleratorMemory": "192 GiB (2 x 96 GiB)",
+  "accelerators": "2 x NVIDIA RTX PRO Server 6000 GPU",
+  "category": "accelerated_computing",
+  "cpuCores": 24,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 25000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 100000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 3125,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "G7e",
+  "hibernation": false,
+  "hypervisor": "Nitro v6",
+  "instanceStore": {
+    "needsInit": null,
+    "readIOPS": "550,000",
+    "storeType": "NVMe SSD",
+    "trimSupport": true,
+    "volumes": "1 x 3800 GB",
+    "writeIOPS": "275,000",
+  },
+  "instanceType": "g7e.12xlarge",
+  "memoryGiB": 512,
+  "metalAvailable": false,
+  "network": {
+    "bandwidthGbps": "400 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 10,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Emerald Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": true,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 48,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-g7e.24xlarge 1`] = `
+{
+  "acceleratorMemory": "384 GiB (4 x 96 GiB)",
+  "accelerators": "4 x NVIDIA RTX PRO Server 6000 GPU",
+  "category": "accelerated_computing",
+  "cpuCores": 48,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 50000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 200000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 6250,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 64,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "G7e",
+  "hibernation": false,
+  "hypervisor": "Nitro v6",
+  "instanceStore": {
+    "needsInit": null,
+    "readIOPS": "1,100,000",
+    "storeType": "NVMe SSD",
+    "trimSupport": true,
+    "volumes": "2 x 3800 GB",
+    "writeIOPS": "550,000",
+  },
+  "instanceType": "g7e.24xlarge",
+  "memoryGiB": 1024,
+  "metalAvailable": false,
+  "network": {
+    "bandwidthGbps": "800 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 20,
+    "networkCards": 2,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Emerald Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": true,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 96,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-g7e.48xlarge 1`] = `
+{
+  "acceleratorMemory": "768 GiB (8 x 96 GiB)",
+  "accelerators": "8 x NVIDIA RTX PRO Server 6000 GPU",
+  "category": "accelerated_computing",
+  "cpuCores": 96,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 100000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 400000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 12500,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 128,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "G7e",
+  "hibernation": false,
+  "hypervisor": "Nitro v6",
+  "instanceStore": {
+    "needsInit": null,
+    "readIOPS": "2,200,000",
+    "storeType": "NVMe SSD",
+    "trimSupport": true,
+    "volumes": "4 x 3800 GB",
+    "writeIOPS": "1,100,000",
+  },
+  "instanceType": "g7e.48xlarge",
+  "memoryGiB": 2048,
+  "metalAvailable": false,
+  "network": {
+    "bandwidthGbps": "1600 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 40,
+    "networkCards": 4,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "Intel Xeon Emerald Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": true,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 192,
 }
 `;
 
