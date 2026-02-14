@@ -82,6 +82,7 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/families/M7i-flex.json",
   "ec2/families/M7i.json",
   "ec2/families/M8a.json",
+  "ec2/families/M8azn.json",
   "ec2/families/M8g.json",
   "ec2/families/M8gb.json",
   "ec2/families/M8gd.json",
@@ -794,6 +795,15 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/instances/m8a.metal-24xl.json",
   "ec2/instances/m8a.metal-48xl.json",
   "ec2/instances/m8a.xlarge.json",
+  "ec2/instances/m8azn.12xlarge.json",
+  "ec2/instances/m8azn.24xlarge.json",
+  "ec2/instances/m8azn.3xlarge.json",
+  "ec2/instances/m8azn.6xlarge.json",
+  "ec2/instances/m8azn.large.json",
+  "ec2/instances/m8azn.medium.json",
+  "ec2/instances/m8azn.metal-12xl.json",
+  "ec2/instances/m8azn.metal-24xl.json",
+  "ec2/instances/m8azn.xlarge.json",
   "ec2/instances/m8g.12xlarge.json",
   "ec2/instances/m8g.16xlarge.json",
   "ec2/instances/m8g.24xlarge.json",
@@ -1386,6 +1396,7 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "M7i",
     "M7i-flex",
     "M8a",
+    "M8azn",
     "M8g",
     "M8gb",
     "M8gd",
@@ -2099,6 +2110,15 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "m8a.metal-24xl",
     "m8a.metal-48xl",
     "m8a.xlarge",
+    "m8azn.12xlarge",
+    "m8azn.24xlarge",
+    "m8azn.3xlarge",
+    "m8azn.6xlarge",
+    "m8azn.large",
+    "m8azn.medium",
+    "m8azn.metal-12xl",
+    "m8azn.metal-24xl",
+    "m8azn.xlarge",
     "m8g.12xlarge",
     "m8g.16xlarge",
     "m8g.24xlarge",
@@ -4712,6 +4732,34 @@ exports[`EC2 Data Files > should match snapshots for all family files > ec2-fami
     "m8a.metal-24xl",
     "m8a.metal-48xl",
     "m8a.xlarge",
+  ],
+  "metalAvailable": true,
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processorArchitecture": "AMD (x86_64)",
+  "spot": true,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all family files > ec2-family-M8azn 1`] = `
+{
+  "category": "general_purpose",
+  "dedicatedHosts": true,
+  "family": "M8azn",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceTypes": [
+    "m8azn.12xlarge",
+    "m8azn.24xlarge",
+    "m8azn.3xlarge",
+    "m8azn.6xlarge",
+    "m8azn.large",
+    "m8azn.medium",
+    "m8azn.metal-12xl",
+    "m8azn.metal-24xl",
+    "m8azn.xlarge",
   ],
   "metalAvailable": true,
   "operatingSystems": [
@@ -49130,6 +49178,585 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     "Linux",
   ],
   "processor": "AMD EPYC 9R45",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 4,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-m8azn.3xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "general_purpose",
+  "cpuCores": 12,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 7500,
+      "burst": 15000,
+    },
+    "iops": {
+      "baseline": 30000,
+      "burst": 60000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 937.5,
+      "burst": 1875,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "M8azn",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "m8azn.3xlarge",
+  "memoryGiB": 48,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 25,
+      "burst": 50,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 40,
+    "ipv6": true,
+    "maxInterfaces": 8,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R05",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 12,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-m8azn.6xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "general_purpose",
+  "cpuCores": 24,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 15000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 60000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 1875,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "M8azn",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "m8azn.6xlarge",
+  "memoryGiB": 96,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "50 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 40,
+    "ipv6": true,
+    "maxInterfaces": 8,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R05",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 24,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-m8azn.12xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "general_purpose",
+  "cpuCores": 48,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 30000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 120000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 3750,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 64,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "M8azn",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "m8azn.12xlarge",
+  "memoryGiB": 192,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "100 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 16,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R05",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 48,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-m8azn.24xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "general_purpose",
+  "cpuCores": 96,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 60000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 240000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 7500,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 128,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "M8azn",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "m8azn.24xlarge",
+  "memoryGiB": 384,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "200 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 16,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R05",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 96,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-m8azn.large 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "general_purpose",
+  "cpuCores": 2,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 1250,
+      "burst": 15000,
+    },
+    "iops": {
+      "baseline": 5000,
+      "burst": 60000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 156.25,
+      "burst": 1875,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "M8azn",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "m8azn.large",
+  "memoryGiB": 8,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 4.17,
+      "burst": 30,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 20,
+    "ipv6": true,
+    "maxInterfaces": 4,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R05",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": true,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 2,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-m8azn.medium 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "general_purpose",
+  "cpuCores": 1,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 625,
+      "burst": 15000,
+    },
+    "iops": {
+      "baseline": 2500,
+      "burst": 60000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 78.12,
+      "burst": 1875,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "M8azn",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "m8azn.medium",
+  "memoryGiB": 4,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 2.08,
+      "burst": 25,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 4,
+    "ipv6": true,
+    "maxInterfaces": 3,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R05",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": false,
+    "nitroTPM": true,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 1,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-m8azn.metal-12xl 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "general_purpose",
+  "cpuCores": 48,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 30000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 120000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 3750,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 64,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "M8azn",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "m8azn.metal-12xl",
+  "memoryGiB": 192,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "100 Gigabit",
+    "efa": false,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 16,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R05",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": false,
+    "nitroTPM": false,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 48,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-m8azn.metal-24xl 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "general_purpose",
+  "cpuCores": 96,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 60000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 240000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 7500,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 79,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "M8azn",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "m8azn.metal-24xl",
+  "memoryGiB": 384,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "200 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 64,
+    "ipv6": true,
+    "maxInterfaces": 16,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R05",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": false,
+    "nitroTPM": false,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 96,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-m8azn.xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "general_purpose",
+  "cpuCores": 4,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 2500,
+      "burst": 15000,
+    },
+    "iops": {
+      "baseline": 10000,
+      "burst": 60000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 312.5,
+      "burst": 1875,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "M8azn",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "m8azn.xlarge",
+  "memoryGiB": 16,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 8.33,
+      "burst": 40,
+    },
+    "efa": false,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 20,
+    "ipv6": true,
+    "maxInterfaces": 4,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R05",
   "processorArchitecture": "AMD (x86_64)",
   "security": {
     "amdSEVSNP": false,
