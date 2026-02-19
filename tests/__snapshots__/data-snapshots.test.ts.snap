@@ -50,6 +50,7 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/families/Hpc6id.json",
   "ec2/families/Hpc7a.json",
   "ec2/families/Hpc7g.json",
+  "ec2/families/Hpc8a.json",
   "ec2/families/I3.json",
   "ec2/families/I3en.json",
   "ec2/families/I4g.json",
@@ -513,6 +514,7 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/instances/hpc7g.16xlarge.json",
   "ec2/instances/hpc7g.4xlarge.json",
   "ec2/instances/hpc7g.8xlarge.json",
+  "ec2/instances/hpc8a.96xlarge.json",
   "ec2/instances/i3.16xlarge.json",
   "ec2/instances/i3.2xlarge.json",
   "ec2/instances/i3.4xlarge.json",
@@ -1202,6 +1204,7 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/instances/trn1.2xlarge.json",
   "ec2/instances/trn1.32xlarge.json",
   "ec2/instances/trn1n.32xlarge.json",
+  "ec2/instances/trn2.3xlarge.json",
   "ec2/instances/trn2.48xlarge.json",
   "ec2/instances/trn2u.48xlarge.json",
   "ec2/instances/u-12tb1.112xlarge.json",
@@ -1364,6 +1367,7 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "Hpc6id",
     "Hpc7a",
     "Hpc7g",
+    "Hpc8a",
     "I3",
     "I3en",
     "I4g",
@@ -1828,6 +1832,7 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "hpc7g.16xlarge",
     "hpc7g.4xlarge",
     "hpc7g.8xlarge",
+    "hpc8a.96xlarge",
     "i3.16xlarge",
     "i3.2xlarge",
     "i3.4xlarge",
@@ -2517,6 +2522,7 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "trn1.2xlarge",
     "trn1.32xlarge",
     "trn1n.32xlarge",
+    "trn2.3xlarge",
     "trn2.48xlarge",
     "trn2u.48xlarge",
     "u-12tb1.112xlarge",
@@ -3336,7 +3342,7 @@ exports[`EC2 Data Files > should match snapshots for all family files > ec2-fami
   "category": "compute_optimized",
   "dedicatedHosts": true,
   "family": "C8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceTypes": [
     "c8id.12xlarge",
@@ -3860,6 +3866,26 @@ exports[`EC2 Data Files > should match snapshots for all family files > ec2-fami
     "Linux",
   ],
   "processorArchitecture": "AWS Graviton (arm64)",
+  "spot": false,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all family files > ec2-family-Hpc8a 1`] = `
+{
+  "category": "hpc",
+  "dedicatedHosts": false,
+  "family": "Hpc8a",
+  "hibernation": false,
+  "hypervisor": "Nitro v6",
+  "instanceTypes": [
+    "hpc8a.96xlarge",
+  ],
+  "metalAvailable": false,
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processorArchitecture": "AMD (x86_64)",
   "spot": false,
 }
 `;
@@ -4950,7 +4976,7 @@ exports[`EC2 Data Files > should match snapshots for all family files > ec2-fami
   "category": "general_purpose",
   "dedicatedHosts": true,
   "family": "M8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceTypes": [
     "m8id.12xlarge",
@@ -6016,7 +6042,7 @@ exports[`EC2 Data Files > should match snapshots for all family files > ec2-fami
   "category": "memory_optimized",
   "dedicatedHosts": true,
   "family": "R8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceTypes": [
     "r8id.12xlarge",
@@ -6193,6 +6219,7 @@ exports[`EC2 Data Files > should match snapshots for all family files > ec2-fami
   "hibernation": false,
   "hypervisor": "Nitro v5",
   "instanceTypes": [
+    "trn2.3xlarge",
     "trn2.48xlarge",
   ],
   "metalAvailable": false,
@@ -22875,7 +22902,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "C8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -22948,7 +22975,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "C8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -23021,7 +23048,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "C8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -23091,7 +23118,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "C8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -23161,7 +23188,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "C8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -23231,7 +23258,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "C8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -23301,7 +23328,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "C8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -23371,7 +23398,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "C8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -23441,7 +23468,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "C8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -23511,7 +23538,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "C8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -23584,7 +23611,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "C8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -23654,7 +23681,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "C8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -23724,7 +23751,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "C8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -30040,6 +30067,69 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "spot": false,
   "threadsPerCore": 1,
   "vCPUs": 64,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-hpc8a.96xlarge 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "hpc",
+  "cpuCores": 192,
+  "dedicatedHosts": false,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 87,
+      "burst": 2085,
+    },
+    "iops": {
+      "baseline": 500,
+      "burst": 11000,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 10.88,
+      "burst": 260.62,
+    },
+    "volumeLimit": {
+      "limit": 27,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "Hpc8a",
+  "hibernation": false,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "hpc8a.96xlarge",
+  "memoryGiB": 768,
+  "metalAvailable": false,
+  "network": {
+    "bandwidthGbps": "300 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 50,
+    "ipv6": true,
+    "maxInterfaces": 4,
+    "networkCards": 2,
+  },
+  "operatingSystems": [
+    "Windows",
+    "Linux",
+  ],
+  "processor": "AMD EPYC 9R45",
+  "processorArchitecture": "AMD (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": false,
+    "nitroTPM": true,
+  },
+  "spot": false,
+  "threadsPerCore": 1,
+  "vCPUs": 192,
 }
 `;
 
@@ -53958,7 +54048,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "M8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -54031,7 +54121,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "M8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -54104,7 +54194,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "M8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -54174,7 +54264,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "M8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -54244,7 +54334,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "M8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -54314,7 +54404,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "M8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -54384,7 +54474,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "M8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -54454,7 +54544,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "M8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -54524,7 +54614,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "M8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -54594,7 +54684,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "M8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -54667,7 +54757,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "M8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -54737,7 +54827,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "M8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -54807,7 +54897,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "M8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -73193,7 +73283,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "R8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -73266,7 +73356,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "R8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -73339,7 +73429,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "R8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -73409,7 +73499,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "R8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -73479,7 +73569,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "R8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -73549,7 +73639,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "R8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -73619,7 +73709,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "R8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -73689,7 +73779,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "R8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -73759,7 +73849,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "R8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -73829,7 +73919,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "R8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -73902,7 +73992,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "R8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -73972,7 +74062,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "R8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -74042,7 +74132,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
     },
   },
   "family": "R8id",
-  "hibernation": true,
+  "hibernation": false,
   "hypervisor": "Nitro v6",
   "instanceStore": {
     "needsInit": null,
@@ -76031,6 +76121,75 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "spot": true,
   "threadsPerCore": 2,
   "vCPUs": 128,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-trn2.3xlarge 1`] = `
+{
+  "acceleratorMemory": "512 GiB (1 x 512 GiB)",
+  "accelerators": "1 x AWS Trainium2 accelerators",
+  "category": "accelerated_computing",
+  "cpuCores": 6,
+  "dedicatedHosts": false,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 5000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 16250,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 625,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 32,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "Trn2",
+  "hibernation": false,
+  "hypervisor": "Nitro v5",
+  "instanceStore": {
+    "needsInit": null,
+    "readIOPS": "107,500",
+    "storeType": "NVMe SSD",
+    "trimSupport": true,
+    "volumes": "1 x 470 GB",
+    "writeIOPS": "45,000",
+  },
+  "instanceType": "trn2.3xlarge",
+  "memoryGiB": 128,
+  "metalAvailable": false,
+  "network": {
+    "bandwidthGbps": "200 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": false,
+    "ipv4PerInterface": 15,
+    "ipv6": true,
+    "maxInterfaces": 2,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Linux",
+  ],
+  "processor": "Intel Xeon Sapphire Rapids",
+  "processorArchitecture": "Intel (x86_64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": true,
+    "nitroEnclaves": true,
+    "nitroTPM": false,
+  },
+  "spot": true,
+  "threadsPerCore": 2,
+  "vCPUs": 12,
 }
 `;
 
