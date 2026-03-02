@@ -577,6 +577,7 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/instances/i8g.8xlarge.json",
   "ec2/instances/i8g.large.json",
   "ec2/instances/i8g.metal-24xl.json",
+  "ec2/instances/i8g.metal-48xl.json",
   "ec2/instances/i8g.xlarge.json",
   "ec2/instances/i8ge.12xlarge.json",
   "ec2/instances/i8ge.18xlarge.json",
@@ -827,6 +828,8 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/instances/m8gb.8xlarge.json",
   "ec2/instances/m8gb.large.json",
   "ec2/instances/m8gb.medium.json",
+  "ec2/instances/m8gb.metal-24xl.json",
+  "ec2/instances/m8gb.metal-48xl.json",
   "ec2/instances/m8gb.xlarge.json",
   "ec2/instances/m8gd.12xlarge.json",
   "ec2/instances/m8gd.16xlarge.json",
@@ -849,6 +852,8 @@ exports[`EC2 Data Files > should have expected number of JSON files > ec2-file-l
   "ec2/instances/m8gn.8xlarge.json",
   "ec2/instances/m8gn.large.json",
   "ec2/instances/m8gn.medium.json",
+  "ec2/instances/m8gn.metal-24xl.json",
+  "ec2/instances/m8gn.metal-48xl.json",
   "ec2/instances/m8gn.xlarge.json",
   "ec2/instances/m8i-flex.12xlarge.json",
   "ec2/instances/m8i-flex.16xlarge.json",
@@ -1895,6 +1900,7 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "i8g.8xlarge",
     "i8g.large",
     "i8g.metal-24xl",
+    "i8g.metal-48xl",
     "i8g.xlarge",
     "i8ge.12xlarge",
     "i8ge.18xlarge",
@@ -2145,6 +2151,8 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "m8gb.8xlarge",
     "m8gb.large",
     "m8gb.medium",
+    "m8gb.metal-24xl",
+    "m8gb.metal-48xl",
     "m8gb.xlarge",
     "m8gd.12xlarge",
     "m8gd.16xlarge",
@@ -2167,6 +2175,8 @@ exports[`EC2 Data Files > should match snapshot for info.json > ec2-info 1`] = `
     "m8gn.8xlarge",
     "m8gn.large",
     "m8gn.medium",
+    "m8gn.metal-24xl",
+    "m8gn.metal-48xl",
     "m8gn.xlarge",
     "m8i-flex.12xlarge",
     "m8i-flex.16xlarge",
@@ -4073,6 +4083,7 @@ exports[`EC2 Data Files > should match snapshots for all family files > ec2-fami
     "i8g.8xlarge",
     "i8g.large",
     "i8g.metal-24xl",
+    "i8g.metal-48xl",
     "i8g.xlarge",
   ],
   "metalAvailable": true,
@@ -4844,9 +4855,11 @@ exports[`EC2 Data Files > should match snapshots for all family files > ec2-fami
     "m8gb.8xlarge",
     "m8gb.large",
     "m8gb.medium",
+    "m8gb.metal-24xl",
+    "m8gb.metal-48xl",
     "m8gb.xlarge",
   ],
-  "metalAvailable": false,
+  "metalAvailable": true,
   "operatingSystems": [
     "Linux",
   ],
@@ -4902,9 +4915,11 @@ exports[`EC2 Data Files > should match snapshots for all family files > ec2-fami
     "m8gn.8xlarge",
     "m8gn.large",
     "m8gn.medium",
+    "m8gn.metal-24xl",
+    "m8gn.metal-48xl",
     "m8gn.xlarge",
   ],
-  "metalAvailable": false,
+  "metalAvailable": true,
   "operatingSystems": [
     "Linux",
   ],
@@ -34554,6 +34569,78 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
 }
 `;
 
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-i8g.metal-48xl 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "storage_optimized",
+  "cpuCores": 192,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 60000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 240000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 7500,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 79,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "I8g",
+  "hibernation": true,
+  "hypervisor": "Nitro v5",
+  "instanceStore": {
+    "needsInit": null,
+    "readIOPS": "7,200,000",
+    "storeType": "NVMe SSD",
+    "trimSupport": true,
+    "volumes": "12 x 3750 GB",
+    "writeIOPS": "3,960,000",
+  },
+  "instanceType": "i8g.metal-48xl",
+  "memoryGiB": 1536,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": {
+      "baseline": 90,
+      "burst": 100,
+    },
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 50,
+    "ipv6": true,
+    "maxInterfaces": 15,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Linux",
+  ],
+  "processor": "AWS Graviton4 Processor",
+  "processorArchitecture": "AWS Graviton (arm64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": true,
+    "nitroEnclaves": false,
+    "nitroTPM": false,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 192,
+}
+`;
+
 exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-i8g.xlarge 1`] = `
 {
   "acceleratorMemory": null,
@@ -50653,7 +50740,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gb.2xlarge",
   "memoryGiB": 32,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": {
       "baseline": 16.666,
@@ -50718,7 +50805,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gb.4xlarge",
   "memoryGiB": 64,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": "33.33 Gigabit",
     "efa": false,
@@ -50780,7 +50867,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gb.8xlarge",
   "memoryGiB": 128,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": "66.66 Gigabit",
     "efa": false,
@@ -50842,7 +50929,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gb.12xlarge",
   "memoryGiB": 192,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": "100 Gigabit",
     "efa": false,
@@ -50904,7 +50991,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gb.16xlarge",
   "memoryGiB": 256,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": "133.33 Gigabit",
     "efa": true,
@@ -50966,7 +51053,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gb.24xlarge",
   "memoryGiB": 384,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": "200 Gigabit",
     "efa": true,
@@ -51028,7 +51115,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gb.48xlarge",
   "memoryGiB": 768,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": "400 Gigabit",
     "efa": true,
@@ -51090,7 +51177,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gb.large",
   "memoryGiB": 8,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": {
       "baseline": 4.166,
@@ -51155,7 +51242,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gb.medium",
   "memoryGiB": 4,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": {
       "baseline": 2.083,
@@ -51185,6 +51272,130 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "spot": true,
   "threadsPerCore": 1,
   "vCPUs": 1,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-m8gb.metal-24xl 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "general_purpose",
+  "cpuCores": 96,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 150000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 720000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 18750,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 39,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "M8gb",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "m8gb.metal-24xl",
+  "memoryGiB": 384,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "200 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 50,
+    "ipv6": true,
+    "maxInterfaces": 24,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Linux",
+  ],
+  "processor": "AWS Graviton4 Processor",
+  "processorArchitecture": "AWS Graviton (arm64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": false,
+    "nitroTPM": false,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 96,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-m8gb.metal-48xl 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "general_purpose",
+  "cpuCores": 192,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 300000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 1440000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 37500,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 78,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "M8gb",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "m8gb.metal-48xl",
+  "memoryGiB": 768,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "400 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 50,
+    "ipv6": true,
+    "maxInterfaces": 24,
+    "networkCards": 2,
+  },
+  "operatingSystems": [
+    "Linux",
+  ],
+  "processor": "AWS Graviton4 Processor",
+  "processorArchitecture": "AWS Graviton (arm64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": false,
+    "nitroTPM": false,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 192,
 }
 `;
 
@@ -51220,7 +51431,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gb.xlarge",
   "memoryGiB": 16,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": {
       "baseline": 8.333,
@@ -52128,7 +52339,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gn.2xlarge",
   "memoryGiB": 32,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": {
       "baseline": 25,
@@ -52193,7 +52404,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gn.4xlarge",
   "memoryGiB": 64,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": "50 Gigabit",
     "efa": false,
@@ -52255,7 +52466,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gn.8xlarge",
   "memoryGiB": 128,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": "100 Gigabit",
     "efa": false,
@@ -52317,7 +52528,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gn.12xlarge",
   "memoryGiB": 192,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": "150 Gigabit",
     "efa": false,
@@ -52379,7 +52590,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gn.16xlarge",
   "memoryGiB": 256,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": "200 Gigabit",
     "efa": true,
@@ -52441,7 +52652,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gn.24xlarge",
   "memoryGiB": 384,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": "300 Gigabit",
     "efa": true,
@@ -52503,7 +52714,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gn.48xlarge",
   "memoryGiB": 768,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": "600 Gigabit",
     "efa": true,
@@ -52565,7 +52776,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gn.large",
   "memoryGiB": 8,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": {
       "baseline": 6.25,
@@ -52630,7 +52841,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gn.medium",
   "memoryGiB": 4,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": {
       "baseline": 3.125,
@@ -52660,6 +52871,130 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "spot": true,
   "threadsPerCore": 1,
   "vCPUs": 1,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-m8gn.metal-24xl 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "general_purpose",
+  "cpuCores": 96,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 60000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 240000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 7500,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 39,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "M8gn",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "m8gn.metal-24xl",
+  "memoryGiB": 384,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "300 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 50,
+    "ipv6": true,
+    "maxInterfaces": 24,
+    "networkCards": 1,
+  },
+  "operatingSystems": [
+    "Linux",
+  ],
+  "processor": "AWS Graviton4 Processor",
+  "processorArchitecture": "AWS Graviton (arm64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": false,
+    "nitroTPM": false,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 96,
+}
+`;
+
+exports[`EC2 Data Files > should match snapshots for all instance files > ec2-instance-m8gn.metal-48xl 1`] = `
+{
+  "acceleratorMemory": null,
+  "accelerators": null,
+  "category": "general_purpose",
+  "cpuCores": 192,
+  "dedicatedHosts": true,
+  "ebs": {
+    "bandwidthMbps": {
+      "baseline": 60000,
+      "burst": null,
+    },
+    "iops": {
+      "baseline": 240000,
+      "burst": null,
+    },
+    "nvme": true,
+    "throughputMBps": {
+      "baseline": 7500,
+      "burst": null,
+    },
+    "volumeLimit": {
+      "limit": 39,
+      "limitType": "dedicated",
+    },
+  },
+  "family": "M8gn",
+  "hibernation": true,
+  "hypervisor": "Nitro v6",
+  "instanceStore": null,
+  "instanceType": "m8gn.metal-48xl",
+  "memoryGiB": 768,
+  "metalAvailable": true,
+  "network": {
+    "bandwidthGbps": "600 Gigabit",
+    "efa": true,
+    "ena": true,
+    "enaExpress": true,
+    "ipv4PerInterface": 50,
+    "ipv6": true,
+    "maxInterfaces": 24,
+    "networkCards": 2,
+  },
+  "operatingSystems": [
+    "Linux",
+  ],
+  "processor": "AWS Graviton4 Processor",
+  "processorArchitecture": "AWS Graviton (arm64)",
+  "security": {
+    "amdSEVSNP": false,
+    "ebsEncryption": true,
+    "encryptionInTransit": true,
+    "instanceStoreEncryption": null,
+    "nitroEnclaves": false,
+    "nitroTPM": false,
+  },
+  "spot": true,
+  "threadsPerCore": 1,
+  "vCPUs": 192,
 }
 `;
 
@@ -52695,7 +53030,7 @@ exports[`EC2 Data Files > should match snapshots for all instance files > ec2-in
   "instanceStore": null,
   "instanceType": "m8gn.xlarge",
   "memoryGiB": 16,
-  "metalAvailable": false,
+  "metalAvailable": true,
   "network": {
     "bandwidthGbps": {
       "baseline": 12.5,
