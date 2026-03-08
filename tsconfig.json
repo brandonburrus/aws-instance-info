@@ -43,6 +43,6 @@
     "skipDefaultLibCheck": true,
     "skipLibCheck": true
   },
-  "include": ["lib/**/*.ts", "lib/**/*.json"],
+  "include": ["lib/**/*.ts"],
   "exclude": ["node_modules", "dist", "lib/**/*.test.ts"]
 }

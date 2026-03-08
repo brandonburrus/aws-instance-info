@@ -1,36 +1,51 @@
-import { readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import makeSynchronous from 'make-synchronous'
 
-import {
-  EC2_DATA_DIR,
+import type { EC2FamilyData, EC2Info, EC2InstanceDetails } from './types.js'
+
+// Re-export cache utilities directly — these operate on the async module's
+// in-process state (the worker thread reuses its module scope).
+export {
   clearEC2Cache,
-  familyCache,
   getEC2CacheStats,
-  infoCacheHolder,
-  instanceCache,
-} from './ec2.cache.js'
-import type {
-  EC2Category,
-  EC2FamilyData,
-  EC2Info,
-  EC2InstanceDetails,
-  EC2InstanceFamily,
-  EC2InstanceType,
-} from './types.js'
+} from './ec2.async.js'
 
-/* Re-export cache utilities */
-export { clearEC2Cache, getEC2CacheStats }
+// ---------------------------------------------------------------------------
+// Worker-safe dynamic import helper
+// ---------------------------------------------------------------------------
+// make-synchronous stringifies callback functions and runs them in a worker
+// thread. Vite's SSR transform replaces import() with __vite_ssr_dynamic_import__
+// which doesn't exist in worker thread contexts.
+//
+// Fix: pre-compute the absolute async-module URL from import.meta.url at
+// module load time (tsc preserves import.meta.url; the dist file's URL gives
+// the correct absolute path). Then embed that URL as a string literal inside
+// the callback using new Function(), which Vite cannot inspect or transform.
+//
+// When the dist/ec2.js runs:
+//   import.meta.url = file:///path/dist/ec2.js
+//   asyncUrl        = file:///path/dist/ec2.async.js  ← correct
+// The worker then does:  await import("file:///path/dist/ec2.async.js")  ← works
+// ---------------------------------------------------------------------------
 
-/* Internal helper function to load and parse JSON files */
-function loadJson<T>(relativePath: string): T {
-  const fullPath = join(EC2_DATA_DIR, relativePath)
-  const content = readFileSync(fullPath, 'utf-8')
-  return JSON.parse(content) as T
+const _ec2AsyncUrl = new URL('./ec2.async.js', import.meta.url).href
+
+/** Create a makeSynchronous-compatible async function with the URL baked in. */
+function makeWorkerFn<TArgs extends unknown[], TReturn>(
+  body: (
+    mod: Record<string, (...a: unknown[]) => Promise<unknown>>,
+    ...args: TArgs
+  ) => Promise<TReturn>,
+): (...args: TArgs) => Promise<TReturn> {
+  // Embed the URL as a string literal so the worker is self-contained
+  return new Function(`return async function(...args) {
+    const mod = await import(${JSON.stringify(_ec2AsyncUrl)})
+    return (${body.toString()})(mod, ...args)
+  }`)() as (...args: TArgs) => Promise<TReturn>
 }
 
 /**
  * Get the EC2 info manifest containing lists of all families and instance types.
- * This is a lightweight file that can be used to enumerate available data.
+ * This is a lightweight call that can be used to enumerate available data.
  *
  * @returns EC2Info object with families, instances, and categories arrays
  *
@@ -44,14 +59,9 @@ function loadJson<T>(relativePath: string): T {
  * console.log(info.categories) // ['general_purpose', 'compute_optimized', ...]
  * ```
  */
-export function getEC2Info(): EC2Info {
-  if (infoCacheHolder.value) {
-    return infoCacheHolder.value
-  }
-
-  infoCacheHolder.value = loadJson<EC2Info>('info.json')
-  return infoCacheHolder.value
-}
+export const getEC2Info = makeSynchronous(
+  makeWorkerFn(async mod => (mod.getEC2Info as () => Promise<EC2Info>)()),
+)
 
 /**
  * Get detailed information for a specific EC2 instance type.
@@ -71,18 +81,13 @@ export function getEC2Info(): EC2Info {
  * console.log(instance.hypervisor) // 'Nitro v2'
  * ```
  */
-export function getEC2InstanceInfo(
-  instanceType: EC2InstanceType,
-): EC2InstanceDetails {
-  const cached = instanceCache.get(instanceType)
-  if (cached) {
-    return cached
-  }
-
-  const data = loadJson<EC2InstanceDetails>(`instances/${instanceType}.json`)
-  instanceCache.set(instanceType, data)
-  return data
-}
+export const getEC2InstanceInfo = makeSynchronous(
+  makeWorkerFn(async (mod, instanceType: string) =>
+    (mod.getEC2InstanceInfo as (t: string) => Promise<EC2InstanceDetails>)(
+      instanceType,
+    ),
+  ),
+)
 
 /**
  * Get all data for an EC2 instance family.
@@ -103,20 +108,14 @@ export function getEC2InstanceInfo(
  * console.log(family.processorArchitecture) // 'Intel (x86_64)'
  * ```
  */
-export function getEC2Family(family: EC2InstanceFamily): EC2FamilyData {
-  const cached = familyCache.get(family)
-  if (cached) {
-    return cached
-  }
-
-  const data = loadJson<EC2FamilyData>(`families/${family}.json`)
-  familyCache.set(family, data)
-  return data
-}
+export const getEC2Family = makeSynchronous(
+  makeWorkerFn(async (mod, family: string) =>
+    (mod.getEC2Family as (f: string) => Promise<EC2FamilyData>)(family),
+  ),
+)
 
 /**
  * Get all instance types belonging to a specific EC2 family.
- * This loads the family file but only returns the list of instance types.
  *
  * @param family - The instance family (e.g., "M5")
  * @returns Array of instance type names in the family
@@ -129,12 +128,11 @@ export function getEC2Family(family: EC2InstanceFamily): EC2FamilyData {
  * console.log(types) // ['m5.large', 'm5.xlarge', 'm5.2xlarge', ...]
  * ```
  */
-export function getEC2FamilyInstanceTypes(
-  family: EC2InstanceFamily,
-): EC2InstanceType[] {
-  const familyData = getEC2Family(family)
-  return familyData.instanceTypes
-}
+export const getEC2FamilyInstanceTypes = makeSynchronous(
+  makeWorkerFn(async (mod, family: string) =>
+    (mod.getEC2FamilyInstanceTypes as (f: string) => Promise<string[]>)(family),
+  ),
+)
 
 /**
  * Get the category for an EC2 instance family.
@@ -153,10 +151,11 @@ export function getEC2FamilyInstanceTypes(
  * console.log(category2) // 'compute_optimized'
  * ```
  */
-export function getEC2FamilyCategory(family: EC2InstanceFamily): EC2Category {
-  const familyData = getEC2Family(family)
-  return familyData.category
-}
+export const getEC2FamilyCategory = makeSynchronous(
+  makeWorkerFn(async (mod, family: string) =>
+    (mod.getEC2FamilyCategory as (f: string) => Promise<string>)(family),
+  ),
+)
 
 /**
  * Get all available EC2 instance families.
@@ -172,10 +171,11 @@ export function getEC2FamilyCategory(family: EC2InstanceFamily): EC2Category {
  * console.log(families.length) // ~150
  * ```
  */
-export function getAllEC2Families(): EC2InstanceFamily[] {
-  const info = getEC2Info()
-  return info.families
-}
+export const getAllEC2Families = makeSynchronous(
+  makeWorkerFn(async mod =>
+    (mod.getAllEC2Families as () => Promise<string[]>)(),
+  ),
+)
 
 /**
  * Get all available EC2 instance types.
@@ -191,10 +191,11 @@ export function getAllEC2Families(): EC2InstanceFamily[] {
  * console.log(types.length) // ~1000
  * ```
  */
-export function getAllEC2InstanceTypes(): EC2InstanceType[] {
-  const info = getEC2Info()
-  return info.instances
-}
+export const getAllEC2InstanceTypes = makeSynchronous(
+  makeWorkerFn(async mod =>
+    (mod.getAllEC2InstanceTypes as () => Promise<string[]>)(),
+  ),
+)
 
 /**
  * Get all available EC2 categories.
@@ -211,10 +212,11 @@ export function getAllEC2InstanceTypes(): EC2InstanceType[] {
  * //  'storage_optimized', 'accelerated_computing', 'hpc']
  * ```
  */
-export function getAllEC2Categories(): EC2Category[] {
-  const info = getEC2Info()
-  return info.categories
-}
+export const getAllEC2Categories = makeSynchronous(
+  makeWorkerFn(async mod =>
+    (mod.getAllEC2Categories as () => Promise<string[]>)(),
+  ),
+)
 
 /**
  * Check if an EC2 instance type exists in the dataset.
@@ -231,10 +233,13 @@ export function getAllEC2Categories(): EC2Category[] {
  * console.log(isValidEC2InstanceType('t3.micro')) // true
  * ```
  */
-export function isValidEC2InstanceType(instanceType: string): boolean {
-  const info = getEC2Info()
-  return info.instances.includes(instanceType as EC2InstanceType)
-}
+export const isValidEC2InstanceType = makeSynchronous(
+  makeWorkerFn(async (mod, instanceType: string) =>
+    (mod.isValidEC2InstanceType as (t: string) => Promise<boolean>)(
+      instanceType,
+    ),
+  ),
+)
 
 /**
  * Check if an EC2 instance family exists in the dataset.
@@ -251,10 +256,11 @@ export function isValidEC2InstanceType(instanceType: string): boolean {
  * console.log(isValidEC2Family('Invalid')) // false
  * ```
  */
-export function isValidEC2Family(family: string): boolean {
-  const info = getEC2Info()
-  return info.families.includes(family as EC2InstanceFamily)
-}
+export const isValidEC2Family = makeSynchronous(
+  makeWorkerFn(async (mod, family: string) =>
+    (mod.isValidEC2Family as (f: string) => Promise<boolean>)(family),
+  ),
+)
 
 /**
  * Get multiple EC2 instances at once. More efficient than calling getEC2InstanceInfo
@@ -277,16 +283,15 @@ export function isValidEC2Family(family: string): boolean {
  * // c7.2xlarge: 8 vCPUs
  * ```
  */
-export function getEC2Instances(
-  instanceTypes: EC2InstanceType[],
-): Map<EC2InstanceType, EC2InstanceDetails> {
-  const results = instanceTypes.map(type => {
-    const details = getEC2InstanceInfo(type)
-    return [type, details] as const
-  })
-
-  return new Map(results)
-}
+export const getEC2Instances = makeSynchronous(
+  makeWorkerFn(async (mod, instanceTypes: string[]) =>
+    (
+      mod.getEC2Instances as (
+        ts: string[],
+      ) => Promise<Map<string, EC2InstanceDetails>>
+    )(instanceTypes),
+  ),
+)
 
 /**
  * Get multiple EC2 families at once. More efficient than calling getEC2Family
@@ -309,13 +314,12 @@ export function getEC2Instances(
  * // R6i: memory_optimized, 16 types
  * ```
  */
-export function getEC2Families(
-  families: EC2InstanceFamily[],
-): Map<EC2InstanceFamily, EC2FamilyData> {
-  const results = families.map(family => {
-    const data = getEC2Family(family)
-    return [family, data] as const
-  })
-
-  return new Map(results)
-}
+export const getEC2Families = makeSynchronous(
+  makeWorkerFn(async (mod, families: string[]) =>
+    (
+      mod.getEC2Families as (
+        fs: string[],
+      ) => Promise<Map<string, EC2FamilyData>>
+    )(families),
+  ),
+)

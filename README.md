@@ -33,7 +33,7 @@ console.log(m5Large.vCPUs);      // 2
 console.log(m5Large.category);   // 'general_purpose'
 ```
 
-NOTE: By default, the API loads data from disk synchronously. If you prefer async, you can use the async API from `aws-instance-info/async`.
+NOTE: By default, the API fetches and caches data synchronously on first use. If you prefer async, you can use the async API from `aws-instance-info/async`.
 
 ```typescript
 import { getEC2InstanceInfo } from 'aws-instance-info/async';
@@ -83,9 +83,8 @@ console.log(cacheM5Large.category);    // 'general_purpose'
 ## FAQ
 
 Q: Where does the data come from?
-The data is sourced from the official AWS documentation and is updated regularly to reflect any changes made by AWS.
-This process is completely automated via the python scripts as part of this project.
+The data is sourced directly from the official AWS documentation pages at runtime. On first use, the library fetches and parses the relevant AWS docs pages, then caches the results in memory for all subsequent calls.
 
 Q: How is the data stored?
-The data is stored in JSON files within the package, allowing for quick and efficient access. These loaded and cached on-demand in memory.
+Data is fetched from AWS documentation and held in-memory using an LRU cache. There are no bundled JSON data files — the package stays small and data is always up-to-date with what AWS publishes.
 

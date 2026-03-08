@@ -22,9 +22,9 @@
     "url": "https://github.com/brandonburrus/aws-instance-info/issues"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
-  "files": ["dist", "data", "README.md", "LICENSE"],
+  "files": ["dist", "README.md", "LICENSE"],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -36,14 +36,11 @@
     "./async": {
       "import": "./dist/index.async.js",
       "types": "./dist/index.async.d.ts"
-    },
-    "./data/ec2/*": "./data/ec2/*",
-    "./data/rds/*": "./data/rds/*",
-    "./data/elasticache/*": "./data/elasticache/*"
+    }
   },
   "scripts": {
     "build": "tsc",
-    "generate": "cd scripts && uv run generate.py",
+    "pretest": "tsc",
     "test": "vitest run",
     "test:watch": "vitest",
     "prepare": "husky",
@@ -69,6 +66,7 @@
     "@vitest/coverage-v8": "^4.0.13",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.0",
+    "msw": "^2.12.10",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.14",
     "typedoc-github-theme": "^0.3.1",
@@ -76,6 +74,8 @@
     "vitest": "^4.0.13"
   },
   "dependencies": {
-    "lru-cache": "^11.2.2"
+    "lru-cache": "^11.2.2",
+    "make-synchronous": "^2.1.0",
+    "node-html-parser": "^7.1.0"
   }
 }

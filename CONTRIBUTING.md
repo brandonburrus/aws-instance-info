@@ -8,7 +8,6 @@ Thank you for your interest in contributing to **aws-instance-info**! This docum
 - [Development Setup](#development-setup)
 - [Project Architecture](#project-architecture)
 - [Making Changes](#making-changes)
-- [Data Generation](#data-generation)
 - [Testing](#testing)
 - [Code Style](#code-style)
 - [Commit Guidelines](#commit-guidelines)
@@ -22,16 +21,14 @@ Thank you for your interest in contributing to **aws-instance-info**! This docum
 - **RDS Instance Classes** - ~350 instance classes across ~40 families
 - **ElastiCache Node Types** - ~73 node types across ~13 families
 
-The library scrapes AWS documentation to provide accurate, up-to-date specifications including memory, vCPUs, networking capabilities, EBS support, and more. Data is lazy-loaded on-demand and cached using an LRU cache for optimal performance.
+The library fetches and parses AWS documentation pages at runtime to provide accurate, up-to-date specifications including memory, vCPUs, networking capabilities, EBS support, and more. Data is lazy-loaded on first use and cached using an LRU cache for optimal performance.
 
 ## Development Setup
 
 ### Prerequisites
 
-- **Node.js** >= 16.0.0
+- **Node.js** >= 18.0.0
 - **npm** (comes with Node.js)
-- **Python** (for data generation script)
-- **uv** (Python package manager, for data generation)
 
 ### Installation
 
@@ -65,45 +62,39 @@ npm test
 ```
 aws-instance-info/
 ├── lib/                    # Source code
-│   ├── index.ts           # Main entry (re-exports EC2, RDS, ElastiCache)
-│   ├── ec2.ts             # EC2 API functions
-│   ├── rds.ts             # RDS API functions
-│   ├── elasticache.ts     # ElastiCache API functions
-│   └── types.ts           # Auto-generated TypeScript types (DO NOT EDIT)
-├── data/                   # Generated JSON data (DO NOT EDIT)
-│   ├── ec2/
-│   │   ├── info.json      # Manifest of families, instances, categories
-│   │   ├── families/      # ~150 family JSON files (M5.json, C7.json, etc.)
-│   │   └── instances/     # ~1000 instance JSON files (m5.large.json, etc.)
-│   ├── rds/
-│   │   ├── info.json
-│   │   ├── families/      # ~40 family JSON files
-│   │   └── instances/     # ~350 instance JSON files
-│   └── elasticache/
-│       ├── info.json
-│       ├── families/      # ~13 family JSON files
-│       └── nodes/         # ~73 node type JSON files
-├── scripts/
-│   └── generate.py        # Data generation script
+│   ├── index.ts           # Main entry (re-exports EC2, RDS, ElastiCache sync APIs)
+│   ├── index.async.ts     # Async entry (re-exports EC2, RDS, ElastiCache async APIs)
+│   ├── ec2.ts             # EC2 sync wrapper (uses make-synchronous)
+│   ├── ec2.async.ts       # EC2 async API with inline LRU cache
+│   ├── rds.ts             # RDS sync wrapper (uses make-synchronous)
+│   ├── rds.async.ts       # RDS async API with inline LRU cache
+│   ├── elasticache.ts     # ElastiCache sync wrapper (uses make-synchronous)
+│   ├── elasticache.async.ts # ElastiCache async API with inline LRU cache
+│   ├── fetch.ts           # HTML parsing + AWS docs fetch functions
+│   ├── types.ts           # TypeScript interfaces (hand-written, safe to edit)
+│   └── constants.ts       # LRU cache size constants
 ├── tests/                  # Test files
+│   ├── fixtures/          # Saved HTML fixtures for MSW test intercepts
+│   └── setup.ts           # MSW server setup
 └── dist/                   # Compiled output (generated)
 ```
 
 ### Key Concepts
 
-- **Lazy Loading**: Instance data is only loaded from disk when requested
-- **LRU Caching**: Loaded data is cached to minimize disk I/O
-- **Type Safety**: Full TypeScript support with auto-generated union types
-- **Sync + Async APIs**: Both synchronous and asynchronous APIs available
+- **Runtime Fetch**: On first use, the library fetches AWS documentation pages and parses the HTML tables
+- **LRU Caching**: Parsed data is cached in-memory to avoid redundant network requests
+- **Plain Map Lookups**: A plain `Map` is kept alongside the LRU so entries are never silently evicted during bulk loads
+- **Type Safety**: Full TypeScript support with hand-written interfaces in `lib/types.ts`
+- **Sync + Async APIs**: Both synchronous (via `make-synchronous`) and asynchronous APIs available
 
 ## Making Changes
 
 ### Adding New Features
 
-1. **API Functions**: Add to `lib/ec2.ts`, `lib/rds.ts`, or `lib/elasticache.ts`
+1. **API Functions**: Add to `lib/ec2.async.ts`, `lib/rds.async.ts`, or `lib/elasticache.async.ts` (and expose via the sync wrappers in `lib/ec2.ts`, `lib/rds.ts`, `lib/elasticache.ts` if needed)
 2. **Tests**: Add corresponding tests in `tests/`
 3. **Documentation**: Update README.md if adding user-facing features
-4. **Type Definitions**: Types are auto-generated - don't edit `lib/types.ts` manually
+4. **Type Definitions**: Edit `lib/types.ts` directly — it is hand-written and safe to modify
 
 ### Fixing Bugs
 
@@ -111,36 +102,6 @@ aws-instance-info/
 2. Fix the bug in the appropriate module
 3. Ensure all tests pass
 4. Document the fix in your commit message
-
-## Data Generation
-
-The `scripts/generate.py` script scrapes AWS documentation and generates:
-
-1. JSON data files for all instance types/families
-2. TypeScript union types in `lib/types.ts`
-
-### Running Data Generation
-
-```bash
-cd scripts
-uv run generate.py
-```
-
-**Important Notes:**
-- Data generation requires internet access to scrape AWS docs
-- The script uses Python with `uv` package manager
-- Never manually edit files in `data/` or `lib/types.ts`
-- After regenerating data, rebuild and test:
-  ```bash
-  npm run build
-  npm test
-  ```
-
-### When to Regenerate Data
-
-- AWS releases new instance types/families
-- AWS updates specifications for existing instances
-- Bug fixes in the scraping logic
 
 ## Testing
 
@@ -249,9 +210,6 @@ fix(rds): correct memory value for db.r6g.xlarge
 
 # Documentation
 docs: update contributing guidelines
-
-# Data update
-chore(data): regenerate instance data from AWS docs
 ```
 
 ## Pull Request Process
@@ -282,7 +240,6 @@ chore(data): regenerate instance data from AWS docs
 - [ ] New tests added for new features
 - [ ] Documentation updated if needed
 - [ ] Commit messages follow conventional commits
-- [ ] No manual edits to generated files (`data/`, `lib/types.ts`)
 
 ### PR Review
 

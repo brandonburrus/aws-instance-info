@@ -1,36 +1,56 @@
-import { readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import makeSynchronous from 'make-synchronous'
 
-import {
-  ELASTICACHE_DATA_DIR,
-  clearElastiCacheCache,
-  familyCache,
-  getElastiCacheCacheStats,
-  infoCacheHolder,
-  nodeCache,
-} from './elasticache.cache.js'
 import type {
-  ElastiCacheCategory,
-  ElastiCacheFamily,
   ElastiCacheFamilyData,
   ElastiCacheInfo,
   ElastiCacheNodeDetails,
-  ElastiCacheNodeType,
 } from './types.js'
 
-/* Re-export cache utilities */
-export { clearElastiCacheCache, getElastiCacheCacheStats }
+// Re-export cache utilities directly — these operate on the async module's
+// in-process state (the worker thread reuses its module scope).
+export {
+  clearElastiCacheCache,
+  getElastiCacheCacheStats,
+} from './elasticache.async.js'
 
-/* Internal helper function to load and parse JSON files */
-function loadJson<T>(relativePath: string): T {
-  const fullPath = join(ELASTICACHE_DATA_DIR, relativePath)
-  const content = readFileSync(fullPath, 'utf-8')
-  return JSON.parse(content) as T
+// ---------------------------------------------------------------------------
+// Worker-safe dynamic import helper
+// ---------------------------------------------------------------------------
+// make-synchronous stringifies callback functions and runs them in a worker
+// thread. Vite's SSR transform replaces import() with __vite_ssr_dynamic_import__
+// which doesn't exist in worker thread contexts.
+//
+// Fix: pre-compute the absolute async-module URL from import.meta.url at
+// module load time (tsc preserves import.meta.url; the dist file's URL gives
+// the correct absolute path). Then embed that URL as a string literal inside
+// the callback using new Function(), which Vite cannot inspect or transform.
+//
+// When the dist/elasticache.js runs:
+//   import.meta.url = file:///path/dist/elasticache.js
+//   asyncUrl        = file:///path/dist/elasticache.async.js  ← correct
+// The worker then does:  await import("file:///path/dist/elasticache.async.js")  ← works
+// ---------------------------------------------------------------------------
+
+const _elasticacheAsyncUrl = new URL('./elasticache.async.js', import.meta.url)
+  .href
+
+/** Create a makeSynchronous-compatible async function with the URL baked in. */
+function makeWorkerFn<TArgs extends unknown[], TReturn>(
+  body: (
+    mod: Record<string, (...a: unknown[]) => Promise<unknown>>,
+    ...args: TArgs
+  ) => Promise<TReturn>,
+): (...args: TArgs) => Promise<TReturn> {
+  // Embed the URL as a string literal so the worker is self-contained
+  return new Function(`return async function(...args) {
+    const mod = await import(${JSON.stringify(_elasticacheAsyncUrl)})
+    return (${body.toString()})(mod, ...args)
+  }`)() as (...args: TArgs) => Promise<TReturn>
 }
 
 /**
- * Get the Elasticache info manifest containing lists of all families and node types.
- * This is a lightweight file that can be used to enumerate available data.
+ * Get the ElastiCache info manifest containing lists of all families and node types.
+ * This is a lightweight call that can be used to enumerate available data.
  *
  * @returns ElastiCacheInfo object with families, nodeTypes, and categories arrays
  *
@@ -44,18 +64,15 @@ function loadJson<T>(relativePath: string): T {
  * console.log(info.categories) // ['general_purpose', 'memory_optimized', ...]
  * ```
  */
-export function getElastiCacheInfo(): ElastiCacheInfo {
-  if (infoCacheHolder.value) {
-    return infoCacheHolder.value
-  }
-
-  infoCacheHolder.value = loadJson<ElastiCacheInfo>('info.json')
-  return infoCacheHolder.value
-}
+export const getElastiCacheInfo = makeSynchronous(
+  makeWorkerFn(async mod =>
+    (mod.getElastiCacheInfo as () => Promise<ElastiCacheInfo>)(),
+  ),
+)
 
 /**
- * Get detailed information for a specific Elasticache node type.
- * Loads only the JSON file for the requested node type. Results are cached using LRU.
+ * Get detailed information for a specific ElastiCache node type.
+ * Results are cached using LRU.
  *
  * @param nodeType - The node type (e.g., "cache.m5.large")
  * @returns Node type details including vCPUs, memory, and network specs
@@ -71,21 +88,18 @@ export function getElastiCacheInfo(): ElastiCacheInfo {
  * console.log(node.networkPerformance) // 'Up to 10 Gigabit'
  * ```
  */
-export function getElastiCacheNodeInfo(
-  nodeType: ElastiCacheNodeType,
-): ElastiCacheNodeDetails {
-  const cached = nodeCache.get(nodeType)
-  if (cached) {
-    return cached
-  }
-
-  const data = loadJson<ElastiCacheNodeDetails>(`nodes/${nodeType}.json`)
-  nodeCache.set(nodeType, data)
-  return data
-}
+export const getElastiCacheNodeInfo = makeSynchronous(
+  makeWorkerFn(async (mod, nodeType: string) =>
+    (
+      mod.getElastiCacheNodeInfo as (
+        t: string,
+      ) => Promise<ElastiCacheNodeDetails>
+    )(nodeType),
+  ),
+)
 
 /**
- * Get all data for an Elasticache node family.
+ * Get all data for an ElastiCache node family.
  * Includes the list of node types in the family. Results are cached using LRU.
  *
  * @param family - The node family (e.g., "M5")
@@ -100,22 +114,16 @@ export function getElastiCacheNodeInfo(
  * console.log(family.nodeTypes) // ['cache.m5.large', 'cache.m5.xlarge', ...]
  * ```
  */
-export function getElastiCacheFamily(
-  family: ElastiCacheFamily,
-): ElastiCacheFamilyData {
-  const cached = familyCache.get(family)
-  if (cached) {
-    return cached
-  }
-
-  const data = loadJson<ElastiCacheFamilyData>(`families/${family}.json`)
-  familyCache.set(family, data)
-  return data
-}
+export const getElastiCacheFamily = makeSynchronous(
+  makeWorkerFn(async (mod, family: string) =>
+    (mod.getElastiCacheFamily as (f: string) => Promise<ElastiCacheFamilyData>)(
+      family,
+    ),
+  ),
+)
 
 /**
- * Get all node types belonging to a specific Elasticache family.
- * This loads the family file but only returns the list of node types.
+ * Get all node types belonging to a specific ElastiCache family.
  *
  * @param family - The node family (e.g., "M5")
  * @returns Array of node type names in the family
@@ -128,15 +136,16 @@ export function getElastiCacheFamily(
  * console.log(nodeTypes) // ['cache.m5.large', 'cache.m5.xlarge', 'cache.m5.2xlarge', ...]
  * ```
  */
-export function getElastiCacheFamilyNodeTypes(
-  family: ElastiCacheFamily,
-): ElastiCacheNodeType[] {
-  const familyData = getElastiCacheFamily(family)
-  return familyData.nodeTypes
-}
+export const getElastiCacheFamilyNodeTypes = makeSynchronous(
+  makeWorkerFn(async (mod, family: string) =>
+    (mod.getElastiCacheFamilyNodeTypes as (f: string) => Promise<string[]>)(
+      family,
+    ),
+  ),
+)
 
 /**
- * Get the category for an Elasticache node family.
+ * Get the category for an ElastiCache node family.
  *
  * @param family - The node family (e.g., "M5")
  * @returns The category (e.g., "general_purpose")
@@ -152,15 +161,16 @@ export function getElastiCacheFamilyNodeTypes(
  * console.log(category2) // 'memory_optimized'
  * ```
  */
-export function getElastiCacheFamilyCategory(
-  family: ElastiCacheFamily,
-): ElastiCacheCategory {
-  const familyData = getElastiCacheFamily(family)
-  return familyData.category
-}
+export const getElastiCacheFamilyCategory = makeSynchronous(
+  makeWorkerFn(async (mod, family: string) =>
+    (mod.getElastiCacheFamilyCategory as (f: string) => Promise<string>)(
+      family,
+    ),
+  ),
+)
 
 /**
- * Get all available Elasticache node families.
+ * Get all available ElastiCache node families.
  *
  * @returns Array of all family names
  *
@@ -173,13 +183,14 @@ export function getElastiCacheFamilyCategory(
  * console.log(families.length) // ~13
  * ```
  */
-export function getAllElastiCacheFamilies(): ElastiCacheFamily[] {
-  const info = getElastiCacheInfo()
-  return info.families
-}
+export const getAllElastiCacheFamilies = makeSynchronous(
+  makeWorkerFn(async mod =>
+    (mod.getAllElastiCacheFamilies as () => Promise<string[]>)(),
+  ),
+)
 
 /**
- * Get all available Elasticache node types.
+ * Get all available ElastiCache node types.
  *
  * @returns Array of all node type names
  *
@@ -192,13 +203,14 @@ export function getAllElastiCacheFamilies(): ElastiCacheFamily[] {
  * console.log(nodeTypes.length) // ~73
  * ```
  */
-export function getAllElastiCacheNodeTypes(): ElastiCacheNodeType[] {
-  const info = getElastiCacheInfo()
-  return info.nodeTypes
-}
+export const getAllElastiCacheNodeTypes = makeSynchronous(
+  makeWorkerFn(async mod =>
+    (mod.getAllElastiCacheNodeTypes as () => Promise<string[]>)(),
+  ),
+)
 
 /**
- * Get all available Elasticache categories.
+ * Get all available ElastiCache categories.
  *
  * @returns Array of all category names
  *
@@ -211,13 +223,14 @@ export function getAllElastiCacheNodeTypes(): ElastiCacheNodeType[] {
  * // ['general_purpose', 'memory_optimized', 'network_optimized', 'burstable_performance']
  * ```
  */
-export function getAllElastiCacheCategories(): ElastiCacheCategory[] {
-  const info = getElastiCacheInfo()
-  return info.categories
-}
+export const getAllElastiCacheCategories = makeSynchronous(
+  makeWorkerFn(async mod =>
+    (mod.getAllElastiCacheCategories as () => Promise<string[]>)(),
+  ),
+)
 
 /**
- * Check if an Elasticache node type exists in the dataset.
+ * Check if an ElastiCache node type exists in the dataset.
  *
  * @param nodeType - The node type to check
  * @returns True if the node type exists, false otherwise
@@ -231,13 +244,16 @@ export function getAllElastiCacheCategories(): ElastiCacheCategory[] {
  * console.log(isValidElastiCacheNodeType('cache.t3.micro')) // true
  * ```
  */
-export function isValidElastiCacheNodeType(nodeType: string): boolean {
-  const info = getElastiCacheInfo()
-  return info.nodeTypes.includes(nodeType as ElastiCacheNodeType)
-}
+export const isValidElastiCacheNodeType = makeSynchronous(
+  makeWorkerFn(async (mod, nodeType: string) =>
+    (mod.isValidElastiCacheNodeType as (t: string) => Promise<boolean>)(
+      nodeType,
+    ),
+  ),
+)
 
 /**
- * Check if an Elasticache node family exists in the dataset.
+ * Check if an ElastiCache node family exists in the dataset.
  *
  * @param family - The family name to check
  * @returns True if the family exists, false otherwise
@@ -251,14 +267,14 @@ export function isValidElastiCacheNodeType(nodeType: string): boolean {
  * console.log(isValidElastiCacheFamily('Invalid')) // false
  * ```
  */
-export function isValidElastiCacheFamily(family: string): boolean {
-  const info = getElastiCacheInfo()
-  return info.families.includes(family as ElastiCacheFamily)
-}
+export const isValidElastiCacheFamily = makeSynchronous(
+  makeWorkerFn(async (mod, family: string) =>
+    (mod.isValidElastiCacheFamily as (f: string) => Promise<boolean>)(family),
+  ),
+)
 
 /**
- * Get multiple Elasticache node types at once. More efficient than calling getElastiCacheNodeInfo
- * multiple times for batch operations.
+ * Get multiple ElastiCache node types at once.
  *
  * @param nodeTypes - Array of node types to fetch
  * @returns Map of node type to details
@@ -277,20 +293,18 @@ export function isValidElastiCacheFamily(family: string): boolean {
  * // cache.r6g.2xlarge: 8 vCPUs, 52.82 GiB
  * ```
  */
-export function getElastiCacheNodes(
-  nodeTypes: ElastiCacheNodeType[],
-): Map<ElastiCacheNodeType, ElastiCacheNodeDetails> {
-  const results = nodeTypes.map(nodeType => {
-    const details = getElastiCacheNodeInfo(nodeType)
-    return [nodeType, details] as const
-  })
-
-  return new Map(results)
-}
+export const getElastiCacheNodes = makeSynchronous(
+  makeWorkerFn(async (mod, nodeTypes: string[]) =>
+    (
+      mod.getElastiCacheNodes as (
+        ts: string[],
+      ) => Promise<Map<string, ElastiCacheNodeDetails>>
+    )(nodeTypes),
+  ),
+)
 
 /**
- * Get multiple Elasticache families at once. More efficient than calling getElastiCacheFamily
- * multiple times for batch operations.
+ * Get multiple ElastiCache families at once.
  *
  * @param families - Array of family names to fetch
  * @returns Map of family name to family data
@@ -309,13 +323,12 @@ export function getElastiCacheNodes(
  * // T3: burstable_performance, 3 node types
  * ```
  */
-export function getElastiCacheFamilies(
-  families: ElastiCacheFamily[],
-): Map<ElastiCacheFamily, ElastiCacheFamilyData> {
-  const results = families.map(family => {
-    const data = getElastiCacheFamily(family)
-    return [family, data] as const
-  })
-
-  return new Map(results)
-}
+export const getElastiCacheFamilies = makeSynchronous(
+  makeWorkerFn(async (mod, families: string[]) =>
+    (
+      mod.getElastiCacheFamilies as (
+        fs: string[],
+      ) => Promise<Map<string, ElastiCacheFamilyData>>
+    )(families),
+  ),
+)

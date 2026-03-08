@@ -1,14 +1,6 @@
-// Re-export all types from the generated types file
+// Re-export all types
 export type {
   // EC2 Types
-  EC2InstanceType,
-  EC2InstanceFamily,
-  EC2Category,
-  EC2Hypervisor,
-  EC2ProcessorArchitecture,
-  EC2Processor,
-  EC2OperatingSystem,
-  EC2Accelerator,
   BandwidthSpec,
   VolumeLimitSpec,
   EC2NetworkSpec,
@@ -19,16 +11,10 @@ export type {
   EC2FamilyData,
   EC2Info,
   // RDS Types
-  RDSInstanceClass,
-  RDSInstanceFamily,
-  RDSCategory,
   RDSInstanceDetails,
   RDSFamilyData,
   RDSInfo,
   // Elasticache Types
-  ElastiCacheNodeType,
-  ElastiCacheFamily,
-  ElastiCacheCategory,
   ElastiCacheNodeDetails,
   ElastiCacheFamilyData,
   ElastiCacheInfo,

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<body>
+<!-- Table 0: skipped -->
+<table>
+  <thead><tr><th>Family</th><th>Types</th></tr></thead>
+  <tbody>
+    <tr><td>I3</td><td>i3.large, i3.xlarge</td></tr>
+  </tbody>
+</table>
+
+<!-- Table 1: instance_family_summary -->
+<table>
+  <thead>
+    <tr>
+      <th>Instance family</th>
+      <th>Hypervisor</th>
+      <th>Processor type/architecture</th>
+      <th>Metal instances available</th>
+      <th>Dedicated hosts support</th>
+      <th>Spot support</th>
+      <th>Hibernation support</th>
+      <th>Supported operating systems</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>I3</td>
+      <td>Xen</td>
+      <td>Intel (x86_64)</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Linux | Windows</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Table 2: performance_specifications -->
+<table>
+  <thead>
+    <tr>
+      <th>Instance type</th>
+      <th>vCPUs</th>
+      <th>CPU cores</th>
+      <th>Threads per core</th>
+      <th>Memory (GiB)</th>
+      <th>Processor</th>
+      <th>Accelerators</th>
+      <th>Accelerator memory</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>i3.large</td>
+      <td>2</td>
+      <td>1</td>
+      <td>2</td>
+      <td>15.25</td>
+      <td>Intel Xeon E5-2686 v4</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>i3.xlarge</td>
+      <td>4</td>
+      <td>2</td>
+      <td>2</td>
+      <td>30.5</td>
+      <td>Intel Xeon E5-2686 v4</td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Table 3: network_specifications -->
+<table>
+  <thead>
+    <tr>
+      <th>Instance type</th>
+      <th>Baseline/burst bandwidth (Gbps)</th>
+      <th>EFA</th>
+      <th>ENA</th>
+      <th>ENA Express</th>
+      <th>Network cards</th>
+      <th>Max network interfaces</th>
+      <th>IP addresses per interface</th>
+      <th>IPv6</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>i3.large</td>
+      <td>Up to 10 Gigabit</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>1</td>
+      <td>3</td>
+      <td>10</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>i3.xlarge</td>
+      <td>Up to 10 Gigabit</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>1</td>
+      <td>4</td>
+      <td>15</td>
+      <td>Yes</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Table 4: ebs_specifications -->
+<table>
+  <thead>
+    <tr>
+      <th>Instance type</th>
+      <th>Baseline/maximum bandwidth (Mbps)</th>
+      <th>Baseline/maximum throughput (MB/s, 128 KiB I/O)</th>
+      <th>Baseline/maximum IOPS (16 KiB I/O)</th>
+      <th>NVMe</th>
+      <th>EBS volume limit</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>i3.large</td>
+      <td>425 / 425</td>
+      <td>53.13 / 53.13</td>
+      <td>3000 / 3000</td>
+      <td>No</td>
+      <td>28 (nitro-based limit)</td>
+    </tr>
+    <tr>
+      <td>i3.xlarge</td>
+      <td>850 / 850</td>
+      <td>106.25 / 106.25</td>
+      <td>6000 / 6000</td>
+      <td>No</td>
+      <td>28 (nitro-based limit)</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Table 5: instance_store_specifications -->
+<table>
+  <thead>
+    <tr>
+      <th>Instance type</th>
+      <th>Instance store volumes</th>
+      <th>Instance store type</th>
+      <th>100% random read IOPS/write IOPS</th>
+      <th>Needs initialization1</th>
+      <th>Trim support2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>i3.large</td>
+      <td>1 x 475 GB NVMe SSD</td>
+      <td>NVMe SSD</td>
+      <td>100000 / 35000</td>
+      <td>No</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>i3.xlarge</td>
+      <td>1 x 950 GB NVMe SSD</td>
+      <td>NVMe SSD</td>
+      <td>206250 / 70000</td>
+      <td>No</td>
+      <td>Yes</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Table 6: security_specifications -->
+<table>
+  <thead>
+    <tr>
+      <th>Instance type</th>
+      <th>EBS encryption</th>
+      <th>Instance store encryption</th>
+      <th>Encryption in transit</th>
+      <th>AMD SEV-SNP</th>
+      <th>NitroTPM</th>
+      <th>Nitro Enclaves</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>i3.large</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>i3.xlarge</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

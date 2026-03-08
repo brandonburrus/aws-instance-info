@@ -1,36 +1,115 @@
-import { readFile } from 'node:fs/promises'
-import { join } from 'node:path'
+import { LRUCache } from 'lru-cache'
 
+import { RDS_FAMILY_CACHE_SIZE, RDS_INSTANCE_CACHE_SIZE } from './constants.js'
 import {
-  RDS_DATA_DIR,
-  clearRDSCache,
-  familyCache,
-  getRDSCacheStats,
-  infoCacheHolder,
-  instanceCache,
-} from './rds.cache.js'
-import type {
-  RDSCategory,
-  RDSFamilyData,
-  RDSInfo,
-  RDSInstanceClass,
-  RDSInstanceDetails,
-  RDSInstanceFamily,
-} from './types.js'
+  RDS_CATEGORIES,
+  determineRDSCategory,
+  extractRDSFamily,
+  fetchRDSInstances,
+} from './fetch.js'
+import type { RDSFamilyData, RDSInfo, RDSInstanceDetails } from './types.js'
 
-/* Re-export cache utilities (these remain synchronous) */
-export { clearRDSCache, getRDSCacheStats }
+// === Inline Cache State ===
 
-/* Internal helper function to load and parse JSON files asynchronously */
-async function loadJson<T>(relativePath: string): Promise<T> {
-  const fullPath = join(RDS_DATA_DIR, relativePath)
-  const content = await readFile(fullPath, 'utf-8')
-  return JSON.parse(content) as T
+const instanceCache = new LRUCache<string, RDSInstanceDetails>({
+  max: RDS_INSTANCE_CACHE_SIZE,
+})
+
+const familyCache = new LRUCache<string, RDSFamilyData>({
+  max: RDS_FAMILY_CACHE_SIZE,
+})
+
+// Full dataset maps — held separately from LRU so entries are never evicted.
+// The LRU is kept for API compatibility (getRDSCacheStats / clearRDSCache).
+const instanceMap = new Map<string, RDSInstanceDetails>()
+const familyMap = new Map<string, RDSFamilyData>()
+
+let infoCacheValue: RDSInfo | null = null
+
+let initialized = false
+let initPromise: Promise<void> | null = null
+
+/**
+ * Trigger the lazy bulk fetch of all RDS instance data.
+ * Subsequent calls are no-ops — data is served from LRU cache.
+ */
+async function ensureInitialized(): Promise<void> {
+  if (initialized) return
+  if (initPromise) return initPromise
+
+  initPromise = (async () => {
+    const all = await fetchRDSInstances()
+
+    // Populate instance cache and full map
+    for (const instance of all) {
+      instanceCache.set(instance.instanceClass, instance)
+      instanceMap.set(instance.instanceClass, instance)
+    }
+
+    // Build family data from instances
+    const builtFamilyMap = new Map<string, RDSFamilyData>()
+    for (const instance of all) {
+      const { family, category } = instance
+      let fd = builtFamilyMap.get(family)
+      if (!fd) {
+        fd = { family, category, instanceClasses: [] }
+        builtFamilyMap.set(family, fd)
+      }
+      fd.instanceClasses.push(instance.instanceClass)
+    }
+    for (const [family, fd] of builtFamilyMap) {
+      familyCache.set(family, fd)
+      familyMap.set(family, fd)
+    }
+
+    // Build info manifest
+    const families = [...builtFamilyMap.keys()].sort()
+    const instances = all.map(i => i.instanceClass).sort()
+    const categories = RDS_CATEGORIES
+    infoCacheValue = { families, instances, categories }
+
+    initialized = true
+  })()
+
+  return initPromise
+}
+
+// === Cache Utilities ===
+
+/**
+ * Clear all RDS in-memory caches (instances, families, info manifest).
+ * The next call to any RDS function will re-fetch all data from AWS docs.
+ */
+export function clearRDSCache(): void {
+  instanceCache.clear()
+  familyCache.clear()
+  instanceMap.clear()
+  familyMap.clear()
+  infoCacheValue = null
+  initialized = false
+  initPromise = null
 }
 
 /**
+ * Get current RDS LRU cache statistics.
+ *
+ * @returns Object with instance and family cache sizes
+ */
+export function getRDSCacheStats(): {
+  instanceCacheSize: number
+  familyCacheSize: number
+} {
+  return {
+    instanceCacheSize: instanceCache.size,
+    familyCacheSize: familyCache.size,
+  }
+}
+
+// === Public API ===
+
+/**
  * Get the RDS info manifest containing lists of all families and instance classes.
- * This is a lightweight file that can be used to enumerate available data.
+ * Triggers the initial bulk fetch on first call; subsequent calls use cache.
  *
  * @returns Promise resolving to RDSInfo object with families, instances, and categories arrays
  *
@@ -45,17 +124,13 @@ async function loadJson<T>(relativePath: string): Promise<T> {
  * ```
  */
 export async function getRDSInfo(): Promise<RDSInfo> {
-  if (infoCacheHolder.value) {
-    return infoCacheHolder.value
-  }
-
-  infoCacheHolder.value = await loadJson<RDSInfo>('info.json')
-  return infoCacheHolder.value
+  await ensureInitialized()
+  return infoCacheValue as RDSInfo
 }
 
 /**
  * Get detailed information for a specific RDS instance class.
- * Loads only the JSON file for the requested instance class. Results are cached using LRU.
+ * Triggers the initial bulk fetch on first call; subsequent calls use LRU cache.
  *
  * @param instanceClass - The instance class (e.g., "db.m5.large")
  * @returns Promise resolving to instance class details including vCPUs, memory, network, and storage specs
@@ -72,23 +147,17 @@ export async function getRDSInfo(): Promise<RDSInfo> {
  * ```
  */
 export async function getRDSInstanceInfo(
-  instanceClass: RDSInstanceClass,
+  instanceClass: string,
 ): Promise<RDSInstanceDetails> {
-  const cached = instanceCache.get(instanceClass)
-  if (cached) {
-    return cached
-  }
-
-  const data = await loadJson<RDSInstanceDetails>(
-    `instances/${instanceClass}.json`,
-  )
-  instanceCache.set(instanceClass, data)
-  return data
+  await ensureInitialized()
+  const cached = instanceMap.get(instanceClass)
+  if (cached) return cached
+  throw new Error(`Unknown RDS instance class: ${instanceClass}`)
 }
 
 /**
  * Get all data for an RDS instance family.
- * Includes the list of instance classes in the family. Results are cached using LRU.
+ * Includes the list of instance classes in the family. Results are served from LRU cache.
  *
  * @param family - The instance family (e.g., "M5")
  * @returns Promise resolving to family data including category and instance class list
@@ -102,22 +171,15 @@ export async function getRDSInstanceInfo(
  * console.log(family.instanceClasses) // ['db.m5.large', 'db.m5.xlarge', ...]
  * ```
  */
-export async function getRDSFamily(
-  family: RDSInstanceFamily,
-): Promise<RDSFamilyData> {
-  const cached = familyCache.get(family)
-  if (cached) {
-    return cached
-  }
-
-  const data = await loadJson<RDSFamilyData>(`families/${family}.json`)
-  familyCache.set(family, data)
-  return data
+export async function getRDSFamily(family: string): Promise<RDSFamilyData> {
+  await ensureInitialized()
+  const cached = familyMap.get(family)
+  if (cached) return cached
+  throw new Error(`Unknown RDS instance family: ${family}`)
 }
 
 /**
  * Get all instance classes belonging to a specific RDS family.
- * This loads the family file but only returns the list of instance classes.
  *
  * @param family - The instance family (e.g., "M5")
  * @returns Promise resolving to array of instance class names in the family
@@ -131,8 +193,8 @@ export async function getRDSFamily(
  * ```
  */
 export async function getRDSFamilyInstanceClasses(
-  family: RDSInstanceFamily,
-): Promise<RDSInstanceClass[]> {
+  family: string,
+): Promise<string[]> {
   const familyData = await getRDSFamily(family)
   return familyData.instanceClasses
 }
@@ -154,9 +216,7 @@ export async function getRDSFamilyInstanceClasses(
  * console.log(category2) // 'memory_optimized'
  * ```
  */
-export async function getRDSFamilyCategory(
-  family: RDSInstanceFamily,
-): Promise<RDSCategory> {
+export async function getRDSFamilyCategory(family: string): Promise<string> {
   const familyData = await getRDSFamily(family)
   return familyData.category
 }
@@ -175,7 +235,7 @@ export async function getRDSFamilyCategory(
  * console.log(families.length) // ~40
  * ```
  */
-export async function getAllRDSFamilies(): Promise<RDSInstanceFamily[]> {
+export async function getAllRDSFamilies(): Promise<string[]> {
   const info = await getRDSInfo()
   return info.families
 }
@@ -194,7 +254,7 @@ export async function getAllRDSFamilies(): Promise<RDSInstanceFamily[]> {
  * console.log(classes.length) // ~350
  * ```
  */
-export async function getAllRDSInstanceClasses(): Promise<RDSInstanceClass[]> {
+export async function getAllRDSInstanceClasses(): Promise<string[]> {
   const info = await getRDSInfo()
   return info.instances
 }
@@ -213,7 +273,7 @@ export async function getAllRDSInstanceClasses(): Promise<RDSInstanceClass[]> {
  * // ['general_purpose', 'memory_optimized', 'compute_optimized', 'burstable_performance']
  * ```
  */
-export async function getAllRDSCategories(): Promise<RDSCategory[]> {
+export async function getAllRDSCategories(): Promise<string[]> {
   const info = await getRDSInfo()
   return info.categories
 }
@@ -236,8 +296,8 @@ export async function getAllRDSCategories(): Promise<RDSCategory[]> {
 export async function isValidRDSInstanceClass(
   instanceClass: string,
 ): Promise<boolean> {
-  const info = await getRDSInfo()
-  return info.instances.includes(instanceClass as RDSInstanceClass)
+  await ensureInitialized()
+  return instanceMap.has(instanceClass)
 }
 
 /**
@@ -256,12 +316,12 @@ export async function isValidRDSInstanceClass(
  * ```
  */
 export async function isValidRDSFamily(family: string): Promise<boolean> {
-  const info = await getRDSInfo()
-  return info.families.includes(family as RDSInstanceFamily)
+  await ensureInitialized()
+  return familyMap.has(family)
 }
 
 /**
- * Get multiple RDS instance classes at once. Loads instances in parallel for better performance.
+ * Get multiple RDS instance classes at once.
  *
  * @param instanceClasses - Array of instance classes to fetch
  * @returns Promise resolving to Map of instance class to details
@@ -281,20 +341,19 @@ export async function isValidRDSFamily(family: string): Promise<boolean> {
  * ```
  */
 export async function getRDSInstances(
-  instanceClasses: RDSInstanceClass[],
-): Promise<Map<RDSInstanceClass, RDSInstanceDetails>> {
+  instanceClasses: string[],
+): Promise<Map<string, RDSInstanceDetails>> {
   const results = await Promise.all(
     instanceClasses.map(async instanceClass => {
       const details = await getRDSInstanceInfo(instanceClass)
       return [instanceClass, details] as const
     }),
   )
-
   return new Map(results)
 }
 
 /**
- * Get multiple RDS families at once. Loads families in parallel for better performance.
+ * Get multiple RDS families at once.
  *
  * @param families - Array of family names to fetch
  * @returns Promise resolving to Map of family name to family data
@@ -314,14 +373,16 @@ export async function getRDSInstances(
  * ```
  */
 export async function getRDSFamilies(
-  families: RDSInstanceFamily[],
-): Promise<Map<RDSInstanceFamily, RDSFamilyData>> {
+  families: string[],
+): Promise<Map<string, RDSFamilyData>> {
   const results = await Promise.all(
     families.map(async family => {
       const data = await getRDSFamily(family)
       return [family, data] as const
     }),
   )
-
   return new Map(results)
 }
+
+// Re-export for convenience
+export { determineRDSCategory, extractRDSFamily }

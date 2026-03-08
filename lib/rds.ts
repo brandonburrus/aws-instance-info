@@ -1,36 +1,51 @@
-import { readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import makeSynchronous from 'make-synchronous'
 
-import {
-  RDS_DATA_DIR,
+import type { RDSFamilyData, RDSInfo, RDSInstanceDetails } from './types.js'
+
+// Re-export cache utilities directly — these operate on the async module's
+// in-process state (the worker thread reuses its module scope).
+export {
   clearRDSCache,
-  familyCache,
   getRDSCacheStats,
-  infoCacheHolder,
-  instanceCache,
-} from './rds.cache.js'
-import type {
-  RDSCategory,
-  RDSFamilyData,
-  RDSInfo,
-  RDSInstanceClass,
-  RDSInstanceDetails,
-  RDSInstanceFamily,
-} from './types.js'
+} from './rds.async.js'
 
-/* Re-export cache utilities */
-export { clearRDSCache, getRDSCacheStats }
+// ---------------------------------------------------------------------------
+// Worker-safe dynamic import helper
+// ---------------------------------------------------------------------------
+// make-synchronous stringifies callback functions and runs them in a worker
+// thread. Vite's SSR transform replaces import() with __vite_ssr_dynamic_import__
+// which doesn't exist in worker thread contexts.
+//
+// Fix: pre-compute the absolute async-module URL from import.meta.url at
+// module load time (tsc preserves import.meta.url; the dist file's URL gives
+// the correct absolute path). Then embed that URL as a string literal inside
+// the callback using new Function(), which Vite cannot inspect or transform.
+//
+// When the dist/rds.js runs:
+//   import.meta.url = file:///path/dist/rds.js
+//   asyncUrl        = file:///path/dist/rds.async.js  ← correct
+// The worker then does:  await import("file:///path/dist/rds.async.js")  ← works
+// ---------------------------------------------------------------------------
 
-/* Internal helper function to load and parse JSON files */
-function loadJson<T>(relativePath: string): T {
-  const fullPath = join(RDS_DATA_DIR, relativePath)
-  const content = readFileSync(fullPath, 'utf-8')
-  return JSON.parse(content) as T
+const _rdsAsyncUrl = new URL('./rds.async.js', import.meta.url).href
+
+/** Create a makeSynchronous-compatible async function with the URL baked in. */
+function makeWorkerFn<TArgs extends unknown[], TReturn>(
+  body: (
+    mod: Record<string, (...a: unknown[]) => Promise<unknown>>,
+    ...args: TArgs
+  ) => Promise<TReturn>,
+): (...args: TArgs) => Promise<TReturn> {
+  // Embed the URL as a string literal so the worker is self-contained
+  return new Function(`return async function(...args) {
+    const mod = await import(${JSON.stringify(_rdsAsyncUrl)})
+    return (${body.toString()})(mod, ...args)
+  }`)() as (...args: TArgs) => Promise<TReturn>
 }
 
 /**
  * Get the RDS info manifest containing lists of all families and instance classes.
- * This is a lightweight file that can be used to enumerate available data.
+ * This is a lightweight call that can be used to enumerate available data.
  *
  * @returns RDSInfo object with families, instances, and categories arrays
  *
@@ -44,18 +59,13 @@ function loadJson<T>(relativePath: string): T {
  * console.log(info.categories) // ['general_purpose', 'memory_optimized', ...]
  * ```
  */
-export function getRDSInfo(): RDSInfo {
-  if (infoCacheHolder.value) {
-    return infoCacheHolder.value
-  }
-
-  infoCacheHolder.value = loadJson<RDSInfo>('info.json')
-  return infoCacheHolder.value
-}
+export const getRDSInfo = makeSynchronous(
+  makeWorkerFn(async mod => (mod.getRDSInfo as () => Promise<RDSInfo>)()),
+)
 
 /**
  * Get detailed information for a specific RDS instance class.
- * Loads only the JSON file for the requested instance class. Results are cached using LRU.
+ * Results are cached using LRU.
  *
  * @param instanceClass - The instance class (e.g., "db.m5.large")
  * @returns Instance class details including vCPUs, memory, network, and storage specs
@@ -71,18 +81,13 @@ export function getRDSInfo(): RDSInfo {
  * console.log(instance.networkBandwidthGbps) // 'Up to 10'
  * ```
  */
-export function getRDSInstanceInfo(
-  instanceClass: RDSInstanceClass,
-): RDSInstanceDetails {
-  const cached = instanceCache.get(instanceClass)
-  if (cached) {
-    return cached
-  }
-
-  const data = loadJson<RDSInstanceDetails>(`instances/${instanceClass}.json`)
-  instanceCache.set(instanceClass, data)
-  return data
-}
+export const getRDSInstanceInfo = makeSynchronous(
+  makeWorkerFn(async (mod, instanceClass: string) =>
+    (mod.getRDSInstanceInfo as (c: string) => Promise<RDSInstanceDetails>)(
+      instanceClass,
+    ),
+  ),
+)
 
 /**
  * Get all data for an RDS instance family.
@@ -100,20 +105,14 @@ export function getRDSInstanceInfo(
  * console.log(family.instanceClasses) // ['db.m5.large', 'db.m5.xlarge', ...]
  * ```
  */
-export function getRDSFamily(family: RDSInstanceFamily): RDSFamilyData {
-  const cached = familyCache.get(family)
-  if (cached) {
-    return cached
-  }
-
-  const data = loadJson<RDSFamilyData>(`families/${family}.json`)
-  familyCache.set(family, data)
-  return data
-}
+export const getRDSFamily = makeSynchronous(
+  makeWorkerFn(async (mod, family: string) =>
+    (mod.getRDSFamily as (f: string) => Promise<RDSFamilyData>)(family),
+  ),
+)
 
 /**
  * Get all instance classes belonging to a specific RDS family.
- * This loads the family file but only returns the list of instance classes.
  *
  * @param family - The instance family (e.g., "M5")
  * @returns Array of instance class names in the family
@@ -126,12 +125,13 @@ export function getRDSFamily(family: RDSInstanceFamily): RDSFamilyData {
  * console.log(classes) // ['db.m5.large', 'db.m5.xlarge', 'db.m5.2xlarge', ...]
  * ```
  */
-export function getRDSFamilyInstanceClasses(
-  family: RDSInstanceFamily,
-): RDSInstanceClass[] {
-  const familyData = getRDSFamily(family)
-  return familyData.instanceClasses
-}
+export const getRDSFamilyInstanceClasses = makeSynchronous(
+  makeWorkerFn(async (mod, family: string) =>
+    (mod.getRDSFamilyInstanceClasses as (f: string) => Promise<string[]>)(
+      family,
+    ),
+  ),
+)
 
 /**
  * Get the category for an RDS instance family.
@@ -150,10 +150,11 @@ export function getRDSFamilyInstanceClasses(
  * console.log(category2) // 'memory_optimized'
  * ```
  */
-export function getRDSFamilyCategory(family: RDSInstanceFamily): RDSCategory {
-  const familyData = getRDSFamily(family)
-  return familyData.category
-}
+export const getRDSFamilyCategory = makeSynchronous(
+  makeWorkerFn(async (mod, family: string) =>
+    (mod.getRDSFamilyCategory as (f: string) => Promise<string>)(family),
+  ),
+)
 
 /**
  * Get all available RDS instance families.
@@ -169,10 +170,11 @@ export function getRDSFamilyCategory(family: RDSInstanceFamily): RDSCategory {
  * console.log(families.length) // ~40
  * ```
  */
-export function getAllRDSFamilies(): RDSInstanceFamily[] {
-  const info = getRDSInfo()
-  return info.families
-}
+export const getAllRDSFamilies = makeSynchronous(
+  makeWorkerFn(async mod =>
+    (mod.getAllRDSFamilies as () => Promise<string[]>)(),
+  ),
+)
 
 /**
  * Get all available RDS instance classes.
@@ -188,10 +190,11 @@ export function getAllRDSFamilies(): RDSInstanceFamily[] {
  * console.log(classes.length) // ~350
  * ```
  */
-export function getAllRDSInstanceClasses(): RDSInstanceClass[] {
-  const info = getRDSInfo()
-  return info.instances
-}
+export const getAllRDSInstanceClasses = makeSynchronous(
+  makeWorkerFn(async mod =>
+    (mod.getAllRDSInstanceClasses as () => Promise<string[]>)(),
+  ),
+)
 
 /**
  * Get all available RDS categories.
@@ -207,10 +210,11 @@ export function getAllRDSInstanceClasses(): RDSInstanceClass[] {
  * // ['general_purpose', 'memory_optimized', 'compute_optimized', 'burstable_performance']
  * ```
  */
-export function getAllRDSCategories(): RDSCategory[] {
-  const info = getRDSInfo()
-  return info.categories
-}
+export const getAllRDSCategories = makeSynchronous(
+  makeWorkerFn(async mod =>
+    (mod.getAllRDSCategories as () => Promise<string[]>)(),
+  ),
+)
 
 /**
  * Check if an RDS instance class exists in the dataset.
@@ -227,10 +231,13 @@ export function getAllRDSCategories(): RDSCategory[] {
  * console.log(isValidRDSInstanceClass('db.t3.micro')) // true
  * ```
  */
-export function isValidRDSInstanceClass(instanceClass: string): boolean {
-  const info = getRDSInfo()
-  return info.instances.includes(instanceClass as RDSInstanceClass)
-}
+export const isValidRDSInstanceClass = makeSynchronous(
+  makeWorkerFn(async (mod, instanceClass: string) =>
+    (mod.isValidRDSInstanceClass as (c: string) => Promise<boolean>)(
+      instanceClass,
+    ),
+  ),
+)
 
 /**
  * Check if an RDS instance family exists in the dataset.
@@ -247,14 +254,15 @@ export function isValidRDSInstanceClass(instanceClass: string): boolean {
  * console.log(isValidRDSFamily('Invalid')) // false
  * ```
  */
-export function isValidRDSFamily(family: string): boolean {
-  const info = getRDSInfo()
-  return info.families.includes(family as RDSInstanceFamily)
-}
+export const isValidRDSFamily = makeSynchronous(
+  makeWorkerFn(async (mod, family: string) =>
+    (mod.isValidRDSFamily as (f: string) => Promise<boolean>)(family),
+  ),
+)
 
 /**
- * Get multiple RDS instance classes at once. More efficient than calling getRDSInstanceInfo
- * multiple times for batch operations.
+ * Get multiple RDS instance classes at once. More efficient than calling
+ * getRDSInstanceInfo multiple times for batch operations.
  *
  * @param instanceClasses - Array of instance classes to fetch
  * @returns Map of instance class to details
@@ -273,16 +281,15 @@ export function isValidRDSFamily(family: string): boolean {
  * // db.r6g.2xlarge: 8 vCPUs, 64 GiB
  * ```
  */
-export function getRDSInstances(
-  instanceClasses: RDSInstanceClass[],
-): Map<RDSInstanceClass, RDSInstanceDetails> {
-  const results = instanceClasses.map(instanceClass => {
-    const details = getRDSInstanceInfo(instanceClass)
-    return [instanceClass, details] as const
-  })
-
-  return new Map(results)
-}
+export const getRDSInstances = makeSynchronous(
+  makeWorkerFn(async (mod, instanceClasses: string[]) =>
+    (
+      mod.getRDSInstances as (
+        cs: string[],
+      ) => Promise<Map<string, RDSInstanceDetails>>
+    )(instanceClasses),
+  ),
+)
 
 /**
  * Get multiple RDS families at once. More efficient than calling getRDSFamily
@@ -305,13 +312,12 @@ export function getRDSInstances(
  * // T3: burstable_performance, 8 classes
  * ```
  */
-export function getRDSFamilies(
-  families: RDSInstanceFamily[],
-): Map<RDSInstanceFamily, RDSFamilyData> {
-  const results = families.map(family => {
-    const data = getRDSFamily(family)
-    return [family, data] as const
-  })
-
-  return new Map(results)
-}
+export const getRDSFamilies = makeSynchronous(
+  makeWorkerFn(async (mod, families: string[]) =>
+    (
+      mod.getRDSFamilies as (
+        fs: string[],
+      ) => Promise<Map<string, RDSFamilyData>>
+    )(families),
+  ),
+)
